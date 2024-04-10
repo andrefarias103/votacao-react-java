@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@localhost:5432/db_votacao_pautas?schema=public"
+}
+
+model Usuario {
+        id          Int      @id @default(autoincrement())
+        login       String
+        senha       String
+        nome        String
+        endereco    String
+        email       String
+        cpf         String
+        tipo        String
+        createdAt   DateTime @default(now())
+        updatedAt   DateTime @default(now())
+        deletedAt   DateTime @default(now())
+}
+
+model Categoria {
+        id          Int      @id @default(autoincrement())
+        nome        String
+        descricao   String
+        createdAt   DateTime @default(now())
+        updatedAt   DateTime @default(now())
+        deletedAt   DateTime @default(now())
+}
+
+
+
+
