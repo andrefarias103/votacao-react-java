@@ -9,7 +9,7 @@ export class CategoriaService {
 
   public async createCategory(dadosCategoria: CreateCategoriaDto) {
     const newCategory: CreateCategoriaDto = await this.prisma.categoria.create({
-      data: { nome: dadosCategoria.nome, descricao: dadosCategoria.descricao },
+      data: { nome: dadosCategoria.nome, descricao: dadosCategoria.descricao, ...this.prisma.categoria },
     });
     return newCategory;
   }
@@ -20,6 +20,7 @@ export class CategoriaService {
     return categories.map((categorie) => ({
       nome: categorie.nome,
       descricao: categorie.descricao,
+      ...this.prisma.categoria
     }));
   }
 
