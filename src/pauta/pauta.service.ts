@@ -7,32 +7,49 @@ import { ListPautaDto } from './dto/select-pauta.dto';
 export class PautaService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async createPauta(categoriaId: number, dadosPauta: CreatePautaDto) {
+  ////
+  public async createAgenda(categoriaId: number, dadosPauta: CreatePautaDto) {
     const category = await this.prisma.categoria.findUnique({ where: { id: categoriaId}});
     if (category === null) { throw new NotFoundException('Categoria não foi encontrada')};
 
-    const pauta = await this.prisma.pauta.create(
+    const pauta: CreatePautaDto = await this.prisma.pauta.create(
       { 
         data: { titulo: dadosPauta.titulo, descricao: dadosPauta.descricao,
           categoria: { connect: { id: category.id}}, 
+          ...this.prisma.pauta
         }, 
       });
 
     return pauta;
   }
 
-  public async findAllPautas(): Promise<ListPautaDto[]> {
+  ////
+  public async findAllAgendas(): Promise<ListPautaDto[]> {
     const pautas: ListPautaDto[] = await this.prisma.pauta.findMany();
     return pautas.map((pauta) => ({
       titulo: pauta.titulo,
       descricao: pauta.descricao,
+      categoriaId: pauta.categoriaId,
     }));
 
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} pauta`;
-  // }
+  ////
+  public async findAgendasByCategory(categoriaId: number): Promise<ListPautaDto[]> {
+    
+    const category = await this.prisma.categoria.findUnique({ where: { id: categoriaId}});
+    console.log(category);
+    if (category === null) { 
+        throw new NotFoundException('Categoria não foi encontrada')
+    };
+
+    const agendas = this.prisma.pauta.findMany({ where: {categoriaId: categoriaId}});
+
+    console.log(agendas);
+ 
+    return agendas;
+
+  }
 
   // update(id: number, updatePautaDto: UpdatePautaDto) {
   //   return `This action updates a #${id} pauta`;

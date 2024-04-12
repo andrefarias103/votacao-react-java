@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreatePautaDto } from './dto/create-pauta.dto';
 import { ListPautaDto } from './dto/select-pauta.dto';
 import { PautaService } from './pauta.service';
@@ -8,19 +8,20 @@ export class PautaController {
   constructor(private readonly pautaService: PautaService) {}
 
   @Post()
-  async createPauta(@Query('categoriaId') categoriaId: number, @Body() dadosPauta: CreatePautaDto) {
-    return await this.pautaService.createPauta(categoriaId, dadosPauta);
+  async createAgenda(@Query('categoriaId') categoriaId: number, @Body() dadosPauta: CreatePautaDto) {
+    const newPauta: CreatePautaDto = await this.pautaService.createAgenda(categoriaId, dadosPauta);
+    return newPauta;
   }
 
   @Get()
-  async findAllPautas(): Promise<ListPautaDto[]> {
-    return await this.pautaService.findAllPautas();
+  async findAllAgendas(): Promise<ListPautaDto[]> {
+    return await this.pautaService.findAllAgendas();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.pautaService.findOne(+id);
-  // }
+  @Get('/:categoriaId')
+  async findAgendasByCategory(@Param('categoriaId') categoriaId: number) {
+    return await this.pautaService.findAgendasByCategory(categoriaId);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updatePautaDto: UpdatePautaDto) {

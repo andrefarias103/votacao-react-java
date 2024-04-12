@@ -7,4 +7,7 @@ export class ListPautaDto {
 
     @Expose()
     descricao: string;
+
+    @Expose()
+    categoriaId: number;
 }

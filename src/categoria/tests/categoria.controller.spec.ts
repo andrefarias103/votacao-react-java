@@ -57,4 +57,5 @@ describe('CategoriaController', () => {
       expect(await controller.findAllCategories()).toEqual(mockCategoriesDto);
     });
   });
+
 });
