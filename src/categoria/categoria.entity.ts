@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
+  OneToMany,
   //OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -16,7 +17,7 @@ export class CategoriaEntity {
   nome: string;
   @Column({ name: 'descricao', length: 255, nullable: true })
   descricao: string;
-  //@OneToMany(() => PautaEntity, (pauta) => pauta.categoria, { cascade: true})
+  @OneToMany(() => PautaEntity, (pauta) => pauta.categoria, { cascade: true})
   pauta?: PautaEntity[];
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

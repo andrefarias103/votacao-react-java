@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePautaDto } from './dto/create-pauta.dto';
+import { ListPautaDto } from './dto/select-pauta.dto';
 
 @Injectable()
 export class PautaService {
   constructor(private readonly prisma: PrismaService) {}
 
   public async createPauta(categoriaId: number, dadosPauta: CreatePautaDto) {
-
     const category = await this.prisma.categoria.findUnique({ where: { id: categoriaId}});
     if (category === null) { throw new NotFoundException('Categoria não foi encontrada')};
 
@@ -21,8 +21,13 @@ export class PautaService {
     return pauta;
   }
 
-  findAll() {
-    return `This action returns all pauta`;
+  public async findAllPautas(): Promise<ListPautaDto[]> {
+    const pautas: ListPautaDto[] = await this.prisma.pauta.findMany();
+    return pautas.map((pauta) => ({
+      titulo: pauta.titulo,
+      descricao: pauta.descricao,
+    }));
+
   }
 
   // findOne(id: number) {
