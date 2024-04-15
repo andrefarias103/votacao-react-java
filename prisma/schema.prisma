@@ -22,10 +22,12 @@ model Usuario {
 }
 model Pauta {
         id          Int        @id @default(autoincrement())
-        titulo      String 
+        titulo      String     
         descricao   String
         categoria   Categoria?  @relation("categoria", fields: [categoriaId], references: [id], onDelete: Cascade)
-        categoriaId Int
+        categoriaId Int        
+        sessaoId    Int     @unique
+        sessao      Sessao?
         createdAt   DateTime @default(now())
         updatedAt   DateTime @default(now())
         deletedAt   DateTime @default(now())        
@@ -38,6 +40,20 @@ model Categoria {
         createdAt   DateTime @default(now())
         updatedAt   DateTime @default(now())
         deletedAt   DateTime @default(now())
+}
+
+model Sessao {
+        id          Int      @id @default(autoincrement())          
+        pauta       Pauta? @relation(fields: [pautaId], references: [id])
+        pautaId     Int?   @unique
+        dataHoraInicio   DateTime @default(now())
+        dataHoraFim   DateTime  @default(now())
+        status      String
+        createdAt   DateTime @default(now())
+        updatedAt   DateTime @default(now())
+        deletedAt   DateTime @default(now())          
+
+
 }
 
 

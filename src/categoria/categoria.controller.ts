@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CategoriaService } from './categoria.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { ListCategoriaDto } from './dto/select-categoria.dto';
@@ -17,13 +17,4 @@ export class CategoriaController {
     return await this.categoriaService.findAllCategories();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriaService.findOne(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriaService.remove(+id);
-  }
 }

@@ -1,6 +1,7 @@
 import { UUID } from "crypto";
 import { CategoriaEntity } from "src/categoria/categoria.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { SessaoEntity } from "src/sessao/sessao.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 export class PautaEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -11,6 +12,8 @@ export class PautaEntity {
     descricao: string;
     @ManyToOne( () => CategoriaEntity, (categoria) => categoria.id)
     categoria: CategoriaEntity;
+    @OneToOne( () => SessaoEntity, (sessao) => sessao.id)
+    sessao: SessaoEntity;
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
     @UpdateDateColumn({ name: 'updated_at' })

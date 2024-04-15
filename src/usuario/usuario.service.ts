@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ListaUsuarioDTO } from './dto/ListaUsuario.dto';
 import { CriaUsuarioDTO } from './dto/cria-usuario.dto';
@@ -9,6 +9,10 @@ export class UsuarioService {
 
   public async findAllUsers(): Promise<ListaUsuarioDTO[]> {
     const users: ListaUsuarioDTO[] = await this.prisma.usuario.findMany();
+    if (users === null) {
+      throw new NotFoundException('Nenhum usuário foi encontrada')
+    }; 
+
     return users.map((user) => ({
       login: user.login,
       nome: user.nome,

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { ListCategoriaDto } from './dto/select-categoria.dto';
@@ -15,19 +15,14 @@ export class CategoriaService {
   }
 
   public async findAllCategories(): Promise<ListCategoriaDto[]> {
-    const categories: ListCategoriaDto[] =
-      await this.prisma.categoria.findMany();
+    const categories: ListCategoriaDto[] = await this.prisma.categoria.findMany();
+    if (categories === null) {
+      throw new NotFoundException('Nenhuma categoria foi encontrada')
+    };    
     return categories.map((categorie) => ({
       nome: categorie.nome,
       descricao: categorie.descricao,
     }));
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} categoria`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} categoria`;
-  }
 }
