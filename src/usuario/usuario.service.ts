@@ -19,19 +19,24 @@ export class UsuarioService {
     }));
   }
 
-  async createUser(dadosUsuario: CriaUsuarioDTO) {
-    const newUser: CriaUsuarioDTO = await this.prisma.usuario.create({
-      data: {
-        login: dadosUsuario.login,
-        senha: dadosUsuario.senha,
-        nome: dadosUsuario.nome,
-        endereco: dadosUsuario.endereco || '',
-        email: dadosUsuario.email,
-        cpf: dadosUsuario.cpf,
-        tipo: dadosUsuario.tipo,
-        ...this.prisma.usuario,
-      },
-    });
-    return newUser;
+  async createUser(dadosUsuario: CriaUsuarioDTO): Promise<CriaUsuarioDTO> {
+    try {
+      const newUser: CriaUsuarioDTO = await this.prisma.usuario.create({
+        data: {
+          login: dadosUsuario.login,
+          senha: dadosUsuario.senha,
+          nome: dadosUsuario.nome,
+          endereco: dadosUsuario.endereco || '',
+          email: dadosUsuario.email,
+          cpf: dadosUsuario.cpf,
+          tipo: dadosUsuario.tipo,
+        },
+      });
+      return newUser;
+    }
+    catch (error) {
+      console.error('Erro ao criar usuário:', error);
+      throw error;
+  }
   }
 }

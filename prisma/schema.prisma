@@ -16,8 +16,7 @@ model Usuario {
         email       String
         cpf         String
         tipo        String
-        votacao     Votacao? @relation("votacao", fields: [votacaoId], references: [id], onDelete: Cascade)
-        votacaoId   Int
+        voto        Votacao[]  @relation("usuario")
         createdAt   DateTime @default(now())
         updatedAt   DateTime @default(now())
         deletedAt   DateTime @default(now())
@@ -25,11 +24,15 @@ model Usuario {
 
 model Votacao {
         id           Int        @id @default(autoincrement())
-        usuario      Usuario[]  @relation("votacao")
+        usuario      Usuario    @relation("usuario", fields: [usuarioId], references: [id], onDelete: Cascade)
+        usuarioId    Int
         opcaoVotada  String     @default("Não")   
         dataHoraVoto String
         pauta        Pauta      @relation("pauta", fields: [pautaId], references: [id], onDelete: Cascade)
         pautaId      Int
+        createdAt   DateTime @default(now())
+        updatedAt   DateTime @default(now())
+        deletedAt   DateTime @default(now())        
 }
 
 model Pauta {

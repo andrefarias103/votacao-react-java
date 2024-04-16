@@ -8,7 +8,7 @@ export class PautaService {
   constructor(private readonly prisma: PrismaService) {}
 
   ////
-  public async createAgenda(categoriaId: number, dadosPauta: CreatePautaDto) {
+  public async createAgenda(categoriaId: number, dadosPauta: CreatePautaDto): Promise<CreatePautaDto> {
     const category = await this.prisma.categoria.findUnique({ where: { id: categoriaId}});
     if (category === null) { throw new NotFoundException('Categoria não foi encontrada')};
 
@@ -16,7 +16,6 @@ export class PautaService {
       { 
         data: { titulo: dadosPauta.titulo, descricao: dadosPauta.descricao,
           categoria: { connect: { id: category.id}}, 
-          ...this.prisma.pauta
         }, 
       });
 

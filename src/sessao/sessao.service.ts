@@ -7,20 +7,29 @@ import { ListSessaoDto } from './dto/select-sessao.dto';
 export class SessaoService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async createSession(pautaId: number, dadosSessao: CreateSessaoDto) {
+  public async createSession(pautaId: number, dadosSessao: CreateSessaoDto): Promise<CreateSessaoDto> {
 
-    const agenda = await this.prisma.pauta.findUnique({ where: { id: pautaId}});
-    if (agenda === null) { 
-      throw new NotFoundException('Pauta não foi encontrada')
-    };
+    try {
+            
+      const agenda = await this.prisma.pauta.findUnique({ where: { id: pautaId}});
+      if (agenda === null) { 
+        throw new NotFoundException('Pauta não foi encontrada')
+      };
+  
+      const session: CreateSessaoDto = await this.prisma.sessao.create({
+        data: { dataHoraInicio: dadosSessao.dataHoraInicio, 
+                dataHoraFim: dadosSessao.dataHoraFim, 
+                status: dadosSessao.status, 
+                pauta: { connect: { id: agenda?.id }}, },
+      });    
 
-    const session: CreateSessaoDto = await this.prisma.sessao.create({
-      data: { dataHoraInicio: dadosSessao.dataHoraInicio, 
-              dataHoraFim: dadosSessao.dataHoraFim, 
-              status: dadosSessao.status, 
-              pauta: { connect: { id: agenda?.id }}, },
-    });    
-    return session;
+      return session;
+
+    }
+    catch(error) {
+      console.error('Erro ao criar sessão:', error);
+      throw error;
+    }
   }
 
   public async findAllSessions(): Promise<ListSessaoDto[]> {

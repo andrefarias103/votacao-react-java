@@ -8,7 +8,7 @@ export class SessaoController {
   constructor(private readonly sessaoService: SessaoService) {}
 
   @Post()
-  async createSession(@Query('pautaId') pautaId: number, @Body() dadosSessao: CreateSessaoDto) {
+  async createSession(@Query('pautaId') pautaId: number, @Body() dadosSessao: CreateSessaoDto): Promise<CreateSessaoDto> {
     const newSessao: CreateSessaoDto = await this.sessaoService.createSession(pautaId, dadosSessao);
     return newSessao;
   }

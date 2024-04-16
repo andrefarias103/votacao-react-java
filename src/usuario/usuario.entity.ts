@@ -1,8 +1,10 @@
 import { UUID } from 'crypto';
+import { VotacaoEntity } from 'src/votacao/votacao.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -24,6 +26,8 @@ export class UsuarioEntity {
   cpf: string;
   @Column({ name: 'tipo', length: 100, nullable: false })
   tipo: string;
+  @OneToMany( () => VotacaoEntity, (votacao) => votacao.usuario)
+  votacao: VotacaoEntity;
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
   @UpdateDateColumn({ name: 'updated_at' })
