@@ -1,0 +1,12 @@
+-- DropForeignKey
+ALTER TABLE "Sessao" DROP CONSTRAINT "Sessao_pautaId_fkey";
+
+-- AlterTable
+ALTER TABLE "Sessao" ALTER COLUMN "pautaId" DROP NOT NULL,
+ALTER COLUMN "dataHoraInicio" DROP DEFAULT,
+ALTER COLUMN "dataHoraInicio" SET DATA TYPE TEXT,
+ALTER COLUMN "dataHoraFim" DROP DEFAULT,
+ALTER COLUMN "dataHoraFim" SET DATA TYPE TEXT;
+
+-- AddForeignKey
+ALTER TABLE "Sessao" ADD CONSTRAINT "Sessao_pautaId_fkey" FOREIGN KEY ("pautaId") REFERENCES "Pauta"("id") ON DELETE SET NULL ON UPDATE CASCADE;

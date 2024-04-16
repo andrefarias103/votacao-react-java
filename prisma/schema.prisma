@@ -26,7 +26,7 @@ model Pauta {
         descricao   String
         categoria   Categoria?  @relation("categoria", fields: [categoriaId], references: [id], onDelete: Cascade)
         categoriaId Int        
-        sessaoId    Int     @unique
+        sessaoId    Int?     @unique
         sessao      Sessao?
         createdAt   DateTime @default(now())
         updatedAt   DateTime @default(now())
@@ -46,8 +46,8 @@ model Sessao {
         id          Int      @id @default(autoincrement())          
         pauta       Pauta? @relation(fields: [pautaId], references: [id])
         pautaId     Int?   @unique
-        dataHoraInicio   DateTime @default(now())
-        dataHoraFim   DateTime  @default(now())
+        dataHoraInicio   String
+        dataHoraFim   String
         status      String
         createdAt   DateTime @default(now())
         updatedAt   DateTime @default(now())
