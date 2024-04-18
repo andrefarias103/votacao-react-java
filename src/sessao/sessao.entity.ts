@@ -1,6 +1,7 @@
 import { UUID } from "crypto";
 import { PautaEntity } from "src/pauta/pauta.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { StatusSessaoEnum } from "./enums/status-sessao.enum";
 
 export class SessaoEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -11,8 +12,8 @@ export class SessaoEntity {
     dataHoraInicio: Date;
     @Column({ name: 'dataHoraFim', nullable: false })
     dataHoraFim: Date;
-    @Column({ name: 'status', length: 100, nullable: false })
-    status: string;
+    @Column({ name: 'status', enum: StatusSessaoEnum, nullable: false })
+    status: StatusSessaoEnum;
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
     @UpdateDateColumn({ name: 'updated_at' })

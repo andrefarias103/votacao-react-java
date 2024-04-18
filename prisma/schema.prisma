@@ -64,12 +64,17 @@ model Sessao {
         pautaId     Int?   @unique
         dataHoraInicio   String
         dataHoraFim   String
-        status      String
+        status      StatusSessaoEnum   @default(STATUS_AGUARDANDO)
         createdAt   DateTime @default(now())
         updatedAt   DateTime @default(now())
         deletedAt   DateTime @default(now())          
+}
 
-
+enum StatusSessaoEnum {
+        STATUS_AGUARDANDO
+        STATUS_INICIADA
+        STATUS_CONCLUIDA
+        STATUS_CANCELADA
 }
 
 

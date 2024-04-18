@@ -1,14 +1,16 @@
 import { Exclude, Expose } from "class-transformer";
-import { IsNotEmpty } from "class-validator";
+import { IsDate, IsNotEmpty } from "class-validator";
 
 @Exclude()
 export class CreateSessaoDto {
     @Expose()
     @IsNotEmpty() 
+    @IsDate()
     dataHoraInicio: string;
     
     @Expose()
     @IsNotEmpty()
+    @IsDate()
     dataHoraFim: string;
 
     @Expose()

@@ -1,5 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { ValidationCPF } from '../validation/cpf.validator';
 
 @Exclude()
 export class CriaUsuarioDTO {
@@ -28,13 +29,11 @@ export class CriaUsuarioDTO {
 
   @Expose()
   @IsNotEmpty()
+  @ValidationCPF({ message: 'CPF Inválido' })
   cpf: string;
 
   @Expose()
   @IsNotEmpty()
   tipo: string;
-
-  // createdAt: Date;
-  // updatedAt: Date;
-  // deletedAt: Date;
+  
 }
