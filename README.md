@@ -44,8 +44,19 @@ Siga as instruções abaixo para configurar e executar a aplicação:
 
    ```bash
    npm install
-   
 
+4. Instancie o banco de dados:
+
+   ```bash
+   npx prisma migrate reset
+   npx prisma generate   
+   
+5. Ative o banco de dados no Docker
+
+   ```bash
+   docker-compose up -d
+
+   
 <h3 id="project_run" style="color:#F59527; font-weight: bold;">Executar a aplicação</h3>
 
 A aplicação estará em execução em http://localhost:3000 por padrão. Você pode alterar a porta nas configurações.
