@@ -1,73 +1,91 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+<img loading="lazy" src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<bR>
+<h1 align="center">
+Votação Pautas
+</h1>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<bR>
 
-## Description
+<h3 style="color:#F59527; font-weight: bold;"> Descrição</h3>
+ 
+Este projeto visa fornecer uma solução WEB para gerenciar e participar de sessões de votação.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+<h3 id="requirements" style="color:#F59527; font-weight: bold;">Ferramentas Utilizadas</h3>
 
-```bash
-$ npm install
+  _Requisitos para a execução do projeto_
+
+  - Docker
+  - Docker Compose
+
+  _Plugins VSCode: (Sugestões)_
+
+  - editorconfig
+  - prettier
+  - eslint
+
+<h3 id="project_run" style="color:#F59527; font-weight: bold;">Instalação do projeto </h3>
+Siga as instruções abaixo para configurar e executar a aplicação:
+
+1. Clone este repositório:
+
+   ```bash
+   git clone https://github.com/andrefarias103/votacao-react-java.git```
+
+2. Navegue até o diretório do projeto:
+
+   ```bash
+   cd repositorio
+    
+3. Instale dependências:
+
+   ```bash
+   npm install
+
+4. Instancie o banco de dados:
+
+   ```bash
+   npx prisma migrate reset
+   npx prisma generate   
+   
+5. Ative o banco de dados no Docker
+
+   ```bash
+   docker-compose up -d
+
+   
+<h3 id="project_run" style="color:#F59527; font-weight: bold;">Executar a aplicação</h3>
+
+A aplicação estará em execução em http://localhost:3000 por padrão. Você pode alterar a porta nas configurações.
+
+  ```bash
+  npm run start:dev
+  ```
+
+
+<h3 id="project_run" style="color:#F59527; font-weight: bold;">Scripts</h3>
+
+ ```bash
+start:dev: Inicia a aplicação em modo de desenvolvimento com recarga automática (npm run start:dev).
+start: Inicia a aplicação em modo de produção (npm start).
+build: Compila o projeto para produção (npm run build).
 ```
 
-## Running the app
 
-```bash
-# development
-$ npm run start
+<h3 id="project_run" style="color:#F59527; font-weight: bold;">Testes</h3>
 
-# watch mode
-$ npm run start:dev
+Para executar os testes, use o comando:
 
-# production mode
-$ npm run start:prod
+ ```bash
+npm run test
 ```
 
-## Test
+<h3 id="project_run" style="color:#F59527; font-weight: bold;">Contribuições</h3>
+Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request.
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+<h3 id="project_run" style="color:#F59527; font-weight: bold;">Licença</h3>
+Este projeto está licenciado sob a MIT License.
