@@ -29,12 +29,11 @@ describe('SessaoController', () => {
             const mockSessionDto: CreateSessaoDto = {
                 dataHoraInicio: '15/04/2024 14:00:00',
                 dataHoraFim: '15/04/2024 14:30:00',
-                status: 'Iniciada',
             };
             jest.spyOn(controller, 'createSession').mockResolvedValue(mockSessionDto);
     
-            const newSessionDto = await controller.createSession(pautaId, mockSessionDto);
-            expect(newSessionDto).toEqual(mockSessionDto);        
+            const createSession = await controller.createSession(pautaId, mockSessionDto);
+            expect(createSession).toEqual(mockSessionDto);        
         });
     })
 

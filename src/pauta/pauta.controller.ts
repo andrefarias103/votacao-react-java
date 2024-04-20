@@ -9,8 +9,8 @@ export class PautaController {
 
   @Post()
   async createAgenda(@Query('categoriaId') categoriaId: number, @Body() dadosPauta: CreatePautaDto): Promise<CreatePautaDto> {
-    const newPauta: CreatePautaDto = await this.pautaService.createAgenda(categoriaId, dadosPauta);
-    return newPauta;
+    const agenda: CreatePautaDto = await this.pautaService.createAgenda(categoriaId, dadosPauta);
+    return agenda;
   }
 
   @Get()

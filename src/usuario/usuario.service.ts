@@ -21,7 +21,7 @@ export class UsuarioService {
 
   async createUser(dadosUsuario: CriaUsuarioDTO): Promise<CriaUsuarioDTO> {
     try {
-      const newUser: CriaUsuarioDTO = await this.prisma.usuario.create({
+      const user: CriaUsuarioDTO = await this.prisma.usuario.create({
         data: {
           login: dadosUsuario.login,
           senha: dadosUsuario.senha,
@@ -32,7 +32,7 @@ export class UsuarioService {
           tipo: dadosUsuario.tipo,
         },
       });
-      return newUser;
+      return user;
     }
     catch (error) {
       console.error('Erro ao criar usuário:', error);

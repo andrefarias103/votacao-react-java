@@ -9,7 +9,6 @@ export class VotacaoController {
 
   @Post()
   public async createVotacao(@Query('usuarioId') usuarioId: number, @Query('pautaId') pautaId: number, @Body() dadosVotacao: CreateVotacaoDto): Promise<CreateVotacaoDto> {
-    console.log(`Usuario: ${usuarioId}`);
     return await this.votacaoService.createVotacao(usuarioId, pautaId, dadosVotacao);
   }
 

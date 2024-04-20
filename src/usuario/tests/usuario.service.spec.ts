@@ -29,8 +29,8 @@ describe('UsuarioService', () => {
       };
       jest.spyOn(userService, 'createUser').mockResolvedValue(mockUserDto);
 
-      const newUserDto = await userService.createUser(mockUserDto);
-      expect(newUserDto).toEqual(mockUserDto);
+      const createUser = await userService.createUser(mockUserDto);
+      expect(createUser).toEqual(mockUserDto);
     });
   });
 

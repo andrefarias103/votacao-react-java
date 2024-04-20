@@ -25,8 +25,8 @@ describe('PautaService', () => {
       };
       jest.spyOn(service, 'createAgenda').mockResolvedValue(mockAgendaDto);
       
-      const newAgendaDto = await service.createAgenda(categoryId, mockAgendaDto);
-      expect(newAgendaDto).toEqual(mockAgendaDto);
+      const createAgenda = await service.createAgenda(categoryId, mockAgendaDto);
+      expect(createAgenda).toEqual(mockAgendaDto);
     });
   })
 

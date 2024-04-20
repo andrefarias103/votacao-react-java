@@ -9,7 +9,6 @@ export class VotacaoService {
 
   async createVotacao(usuarioId: number, pautaId: number, dadosVotacao: CreateVotacaoDto): Promise<CreateVotacaoDto> {
     try {
-      console.log(usuarioId);
       const user = await this.prisma.usuario.findUnique({ where: { id: usuarioId}});
       if (user === null) { 
         throw new NotFoundException('Usuário não foi encontrado')
@@ -20,7 +19,7 @@ export class VotacaoService {
         throw new NotFoundException('Pauta não foi encontrada')
       };
   
-      const newVoting: CreateVotacaoDto = await this.prisma.votacao.create({
+      const vote: CreateVotacaoDto = await this.prisma.votacao.create({
         data: {
           opcaoVotada: dadosVotacao.opcaoVotada,
           dataHoraVoto: new Date(Date.now()).toLocaleString(),
@@ -29,7 +28,7 @@ export class VotacaoService {
         },
       });
 
-      return newVoting;
+      return vote;
     }
     catch(error) {
       console.error('Erro ao executar votação:', error);

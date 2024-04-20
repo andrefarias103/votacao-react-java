@@ -9,8 +9,8 @@ export class SessaoController {
 
   @Post()
   async createSession(@Query('pautaId') pautaId: number, @Body() dadosSessao: CreateSessaoDto): Promise<CreateSessaoDto> {
-    const newSessao: CreateSessaoDto = await this.sessaoService.createSession(pautaId, dadosSessao);
-    return newSessao;
+    const session: CreateSessaoDto = await this.sessaoService.createSession(pautaId, dadosSessao);
+    return session;
   }
 
   @Get()

@@ -3,8 +3,8 @@ import { CreateSessaoDto } from "../dto/create-sessao.dto";
 import { ListSessaoDto } from "../dto/select-sessao.dto";
 import { SessaoService } from "../sessao.service";
 
-
 describe('SessionService', () => {
+
     let service: SessaoService;
     let prismaService: PrismaService;
 
@@ -18,18 +18,29 @@ describe('SessionService', () => {
     });
 
     describe('create Session', () => {
+
         it('should create Session', async () => {
             const pautaId: number = 1;
             const mockSessionDto: CreateSessaoDto = {
                 dataHoraInicio: '15/04/2024 14:00:00',
-                dataHoraFim: '15/04/2024 14:30:00',
-                status: 'Iniciada',
+                dataHoraFim: '15/04/2024 14:30:00',                
             };
             jest.spyOn(service, 'createSession').mockResolvedValue(mockSessionDto);
             
-            const newSessionDto = await service.createSession(pautaId, mockSessionDto);
-            expect(newSessionDto).toEqual(mockSessionDto);
+            const createSession = await service.createSession(pautaId, mockSessionDto);
+            expect(createSession).toEqual(mockSessionDto);
         })
+        
+        it('should return an error when validating dates', async () => {
+            const pautaId: number = 0;
+            const mockSessionDto: CreateSessaoDto = {
+                dataHoraInicio: '15/04/2024 15:00:00',
+                dataHoraFim: '15/04/2024 14:30:00',                
+            };
+            
+            await expect(service.createSession(pautaId, mockSessionDto)).rejects.toThrow(Error);
+
+        })           
     })
 
     describe('find all sessions', () => {

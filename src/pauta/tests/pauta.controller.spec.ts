@@ -32,8 +32,8 @@ describe('PautaController', () => {
       };
       jest.spyOn(controller, 'createAgenda').mockResolvedValue(mockAgendaDto);
 
-      const newAgendaDto = await controller.createAgenda(categoryId, mockAgendaDto);
-      expect(newAgendaDto).toEqual(mockAgendaDto);
+      const createAgenda = await controller.createAgenda(categoryId, mockAgendaDto);
+      expect(createAgenda).toEqual(mockAgendaDto);
 
     })
   })

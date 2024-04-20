@@ -1,20 +1,23 @@
 import { Exclude, Expose } from "class-transformer";
-import { IsDate, IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
+//import moment from "moment";
 
 @Exclude()
 export class CreateSessaoDto {
-    @Expose()
+    @Expose()    
+    @IsString()
     @IsNotEmpty() 
-    @IsDate()
+    @Matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, { message: "Data Hora Inicio deve estar no formato YYY-MM-DD HH:mm:ss" })
     dataHoraInicio: string;
     
     @Expose()
-    @IsNotEmpty()
-    @IsDate()
+    @IsOptional()
+    @IsString()
+    @Matches(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, { message: "Data Hora Fim deve estar no formato YYY-MM-DD HH:mm:ss" })
     dataHoraFim: string;
 
-    @Expose()
-    @IsNotEmpty()
-    status: string;
+    // @Expose()
+    // @IsNotEmpty()
+    // status: string;
 
 }

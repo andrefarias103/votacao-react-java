@@ -1,14 +1,15 @@
-import { TRepository } from '../categoria.repository';
+import { PrismaService } from '../../prisma/prisma.service';
 import { CategoriaService } from '../categoria.service';
 import { CreateCategoriaDto } from '../dto/create-categoria.dto';
 import { ListCategoriaDto } from '../dto/select-categoria.dto';
 
 describe('CategoriaService', () => {
   let service: CategoriaService;
-  let repository: TRepository;
+  let prismaService: PrismaService;
 
   beforeEach(async () => {
-    service = new CategoriaService(repository);
+    prismaService = new PrismaService();
+    service = new CategoriaService(prismaService);
   });
 
   it('should be defined', () => {

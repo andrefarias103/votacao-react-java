@@ -12,26 +12,26 @@ export class PautaService {
     const category = await this.prisma.categoria.findUnique({ where: { id: categoriaId}});
     if (category === null) { throw new NotFoundException('Categoria não foi encontrada')};
 
-    const pauta: CreatePautaDto = await this.prisma.pauta.create(
+    const agenda: CreatePautaDto = await this.prisma.pauta.create(
       { 
         data: { titulo: dadosPauta.titulo, descricao: dadosPauta.descricao,
           categoria: { connect: { id: category.id}}, 
         }, 
       });
 
-    return pauta;
+    return agenda;
   }
 
   ////
   public async findAllAgendas(): Promise<ListPautaDto[]> {
-    const pautas: ListPautaDto[] = await this.prisma.pauta.findMany();
-    if (pautas === null) {
+    const agendas: ListPautaDto[] = await this.prisma.pauta.findMany();
+    if (agendas === null) {
       throw new NotFoundException('Nenhuma agenda foi encontrada')
     };          
-    return pautas.map((pauta) => ({
-      titulo: pauta.titulo,
-      descricao: pauta.descricao,
-      categoriaId: pauta.categoriaId,
+    return agendas.map((agenda) => ({
+      titulo: agenda.titulo,
+      descricao: agenda.descricao,
+      categoriaId: agenda.categoriaId,
     }));
 
   }
