@@ -44,11 +44,13 @@ Siga as instruções abaixo para configurar e executar a aplicação:
 
    ```bash
    npm install
+   npm install node
 
 4. Instancie o banco de dados:
 
    ```bash
    npx prisma migrate reset
+   npx node .\prisma\seedData.json
    npx prisma generate   
    
 5. Ative o banco de dados no Docker
