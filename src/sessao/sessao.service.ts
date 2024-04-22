@@ -68,19 +68,31 @@ export class SessaoService {
 
   ////
   public async startSession(sessionId: number, agendaId: number): Promise<boolean> {
-    try {
+    //try {    
+
+          const sessao = await this.repository.findById({ id: sessionId});
+          if (sessao === null) {            
+            throw new NotFoundException(`Sessão [${sessionId}]: Não foi encontrada'`)
+          };
+
+          const agenda = await this.repositoryAgenda.findById({ id: agendaId});
+          if (agenda === null) { 
+            throw new NotFoundException(`Pauta [${agendaId}]: Não foi encontrada'`)
+          };          
+
           await this.repository.update( {
                                           status: 'STATUS_INICIADA',
                                         },
                                         { 
                                           id: sessionId, pautaId: agendaId 
                                         },);
-      return true;
-    }
-    catch(error) {
-      console.log('Não foi possível iniciar a Sessão');
-      return false;
-    }
+
+          return true;
+    // }
+    // catch(error) {
+    //   console.log(error);
+    //   return false;
+    // }
   }
 
   ////

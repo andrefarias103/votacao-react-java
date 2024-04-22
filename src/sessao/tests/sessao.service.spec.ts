@@ -1,3 +1,4 @@
+import { NotFoundException } from "@nestjs/common";
 import { TRepository } from "../../repository/repository";
 import { CreateSessaoDto } from "../dto/create-sessao.dto";
 import { ListSessaoDto } from "../dto/select-sessao.dto";
@@ -40,6 +41,32 @@ describe('SessionService', () => {
             await expect(service.createSession(pautaId, mockSessionDto)).rejects.toThrow(Error);
 
         })           
+    })
+
+    describe('start sessions', () => {
+        it('should not find session', async () => {
+            const mockSessionId = 180;
+            const mockAgendaId = 1;
+            await expect(service.startSession(mockSessionId, mockAgendaId)).rejects.toThrow(NotFoundException);  
+        });
+
+        it('should not find agenda', async () => {
+            const mockSessionId = 13;
+            const mockAgendaId = 100;
+            await expect(service.startSession(mockSessionId, mockAgendaId)).rejects.toThrow(NotFoundException);
+        });        
+
+        it('should start session', async () => {
+            const mockSessionId = 13;
+            const mockAgendaId = 1;
+            const mockResultValue = true;
+
+            jest.spyOn(service, "startSession").mockResolvedValue(mockResultValue);
+
+            const result = await service.startSession(mockSessionId, mockAgendaId);
+            expect(result).toEqual(mockResultValue);
+
+        });              
     })
 
     describe('find all sessions', () => {

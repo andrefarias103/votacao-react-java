@@ -47,6 +47,8 @@ export class TRepository {
       //   }
 
       public async update(dataModel: any, filter: any) {
+        console.log(dataModel);
+        console.log(filter);
         return await prisma[this.modelName].update({ 
           data: dataModel,        
           where: filter
