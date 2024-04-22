@@ -1,15 +1,14 @@
-import { PrismaService } from '../../prisma/prisma.service';
+import { TRepository } from '../../repository/repository';
 import { CreatePautaDto } from '../dto/create-pauta.dto';
 import { ListPautaDto } from '../dto/select-pauta.dto';
 import { PautaService } from '../pauta.service';
 
 describe('PautaService', () => {
   let service: PautaService;
-  let prismaService: PrismaService;
+  let repository: TRepository;
 
   beforeEach(async () => {
-    prismaService = new PrismaService();
-    service = new PautaService(prismaService);
+    service = new PautaService(repository);
     });
 
   it('should be defined', () => {

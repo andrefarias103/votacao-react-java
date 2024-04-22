@@ -1,0 +1,97 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "login": "algf551",
+      "senha": "Teste123",
+      "nome": "André Leonardo Gomes Fonseca",
+      "endereco": "",
+      "email": "algf551@hotmail.com",
+      "cpf": "051.956.960-12",
+      "tipo": "Administrador",
+      "createdAt": "2024-04-16T19:56:57.130Z",
+      "updatedAt": "2024-04-16T19:56:57.130Z",
+      "deletedAt": "2024-04-16T19:56:57.130Z"
+    },
+    {
+      "id": 2,
+      "login": "luiz_eduardo",
+      "senha": "Teste123",
+      "nome": "Luiz Eduardo dos Santos",
+      "endereco": "",
+      "email": "les@hotmail.com",
+      "cpf": "904.690.770-85",
+      "tipo": "Administrador",
+      "createdAt": "2024-04-16T20:02:13.471Z",
+      "updatedAt": "2024-04-16T20:02:13.471Z",
+      "deletedAt": "2024-04-16T20:02:13.471Z"
+    },
+    {
+      "id": 3,
+      "login": "Jorge_lemos",
+      "senha": "Teste123",
+      "nome": "Jorge Lemos",
+      "endereco": "",
+      "email": "jl@hotmail.com",
+      "cpf": "136.626.060-03",
+      "tipo": "Usuário",
+      "createdAt": "2024-04-17T16:42:10.208Z",
+      "updatedAt": "2024-04-17T16:42:10.208Z",
+      "deletedAt": "2024-04-17T16:42:10.208Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "nome": "Assembleia Sindical",
+      "descricao": "Votação do aumento de 1% do vale-refeição.",
+      "createdAt": "2024-04-16T19:13:58.815Z",
+      "updatedAt": "2024-04-16T19:13:58.815Z",
+      "deletedAt": "2024-04-16T19:13:58.815Z"
+    },
+    {
+      "id": 2,
+      "nome": "Plebiscito ",
+      "descricao": "Privatição de empresa pública.",
+      "createdAt": "2024-04-20T20:43:20.247Z",
+      "updatedAt": "2024-04-20T20:43:20.247Z",
+      "deletedAt": "2024-04-20T20:43:20.247Z"
+    }
+  ],
+  "agenda": [
+    {
+      "id": 1,
+      "titulo": "Votação de Portaria 24h",
+      "descricao": "Será votada se os condôminos desejam portaria 24h ou não",
+      "categoriaId": 1,
+      "sessaoId": null,
+      "createdAt": "2024-04-16T20:19:44.720Z",
+      "updatedAt": "2024-04-16T20:19:44.720Z",
+      "deletedAt": "2024-04-16T20:19:44.720Z"
+    }
+  ],
+  "session": [
+    {
+      "id": 12,
+      "pautaId": 1,
+      "dataHoraInicio": "2024-04-15 14:00:00",
+      "dataHoraFim": "2024-04-15 14:10:00",
+      "status": "STATUS_AGUARDANDO",
+      "createdAt": "2024-04-18T21:54:11.234Z",
+      "updatedAt": "2024-04-18T21:54:11.234Z",
+      "deletedAt": "2024-04-18T21:54:11.234Z"
+    }
+  ],
+  "vote": [
+    {
+      "id": 1,
+      "usuarioId": 1,
+      "opcaoVotada": "Sim",
+      "dataHoraVoto": "16/04/2024, 17:38:20",
+      "pautaId": 1,
+      "createdAt": "2024-04-16T20:38:20.024Z",
+      "updatedAt": "2024-04-16T20:38:20.024Z",
+      "deletedAt": "2024-04-16T20:38:20.024Z"
+    }
+  ]
+}

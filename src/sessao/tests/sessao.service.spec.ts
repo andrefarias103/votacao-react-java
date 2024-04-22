@@ -1,4 +1,4 @@
-import { PrismaService } from "../../prisma/prisma.service";
+import { TRepository } from "../../repository/repository";
 import { CreateSessaoDto } from "../dto/create-sessao.dto";
 import { ListSessaoDto } from "../dto/select-sessao.dto";
 import { SessaoService } from "../sessao.service";
@@ -6,11 +6,10 @@ import { SessaoService } from "../sessao.service";
 describe('SessionService', () => {
 
     let service: SessaoService;
-    let prismaService: PrismaService;
+    let repository: TRepository;
 
     beforeEach(async () => {
-        prismaService = new PrismaService();
-        service = new SessaoService(prismaService);
+        service = new SessaoService(repository);
     });
 
     it('should be defined', () => {

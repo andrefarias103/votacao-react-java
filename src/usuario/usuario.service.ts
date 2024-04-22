@@ -1,14 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { TRepository } from '../repository/repository';
 import { ListaUsuarioDTO } from './dto/ListaUsuario.dto';
 import { CriaUsuarioDTO } from './dto/cria-usuario.dto';
 
 @Injectable()
 export class UsuarioService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly repository: TRepository) {
+    
+    this.repository = new TRepository('usuario');
+  }
 
   public async findAllUsers(): Promise<ListaUsuarioDTO[]> {
-    const users: ListaUsuarioDTO[] = await this.prisma.usuario.findMany();
+    const users: ListaUsuarioDTO[] = await this.repository.findAll();
     if (users === null) {
       throw new NotFoundException('Nenhum usuário foi encontrada')
     }; 
@@ -21,7 +24,7 @@ export class UsuarioService {
 
   async createUser(dadosUsuario: CriaUsuarioDTO): Promise<CriaUsuarioDTO> {
     try {
-      const user: CriaUsuarioDTO = await this.prisma.usuario.create({
+      const user: CriaUsuarioDTO = await this.repository.create({
         data: {
           login: dadosUsuario.login,
           senha: dadosUsuario.senha,

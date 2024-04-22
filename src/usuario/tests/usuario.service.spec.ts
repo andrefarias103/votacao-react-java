@@ -1,15 +1,14 @@
-import { PrismaService } from '../../prisma/prisma.service';
+import { TRepository } from 'src/repository/repository';
 import { ListaUsuarioDTO } from '../dto/ListaUsuario.dto';
 import { CriaUsuarioDTO } from '../dto/cria-usuario.dto';
 import { UsuarioService } from '../usuario.service';
 
 describe('UsuarioService', () => {
   let userService: UsuarioService;
-  let prismaService: PrismaService;
+  let repository: TRepository;
 
   beforeEach(async () => {
-    prismaService = new PrismaService();
-    userService = new UsuarioService(prismaService);
+    userService = new UsuarioService(repository);
   });
 
   it('should be defined', () => {

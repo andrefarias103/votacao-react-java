@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaModule } from '../../prisma/prisma.module';
-import { PrismaService } from '../../prisma/prisma.service';
+import { TRepository } from '../../repository/repository';
 import { CreatePautaDto } from '../dto/create-pauta.dto';
 import { ListPautaDto } from '../dto/select-pauta.dto';
 import { PautaController } from '../pauta.controller';
@@ -11,9 +10,9 @@ describe('PautaController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule],
+      imports: [],
       controllers: [PautaController],
-      providers: [PautaService, PrismaService],
+      providers: [PautaService, TRepository],
     }).compile();
 
     controller = module.get<PautaController>(PautaController);

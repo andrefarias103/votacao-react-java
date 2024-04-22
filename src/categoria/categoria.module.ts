@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { TRepository } from '../repository/repository';
 import { CategoriaController } from './categoria.controller';
-import { TRepository } from './categoria.repository';
 import { CategoriaService } from './categoria.service';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [],
   controllers: [CategoriaController],
   providers: [CategoriaService, TRepository],
   exports: [CategoriaService],

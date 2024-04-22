@@ -1,4 +1,4 @@
-import { TRepository } from '../categoria.repository';
+import { TRepository } from '../../repository/repository';
 import { CategoriaService } from '../categoria.service';
 import { CreateCategoriaDto } from '../dto/create-categoria.dto';
 import { ListCategoriaDto } from '../dto/select-categoria.dto';

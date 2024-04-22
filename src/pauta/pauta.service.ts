@@ -1,20 +1,26 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { TRepository } from '../repository/repository';
 import { CreatePautaDto } from './dto/create-pauta.dto';
 import { ListPautaDto } from './dto/select-pauta.dto';
 
 @Injectable()
 export class PautaService {
-  constructor(private readonly prisma: PrismaService) {}
+  
+  private readonly repositoryCategoria: TRepository;
+
+  constructor(private readonly repository: TRepository) {
+    this.repository = new TRepository('pauta');
+    this.repositoryCategoria = new TRepository('categoria');
+  }
 
   ////
   public async createAgenda(categoriaId: number, dadosPauta: CreatePautaDto): Promise<CreatePautaDto> {
-    const category = await this.prisma.categoria.findUnique({ where: { id: categoriaId}});
+    const category = await this.repositoryCategoria.findById({ where: { id: categoriaId}});
     if (category === null) { throw new NotFoundException('Categoria não foi encontrada')};
 
-    const agenda: CreatePautaDto = await this.prisma.pauta.create(
+    const agenda: CreatePautaDto = await this.repository.create(
       { 
-        data: { titulo: dadosPauta.titulo, descricao: dadosPauta.descricao,
+          data: { titulo: dadosPauta.titulo, descricao: dadosPauta.descricao,
           categoria: { connect: { id: category.id}}, 
         }, 
       });
@@ -24,7 +30,7 @@ export class PautaService {
 
   ////
   public async findAllAgendas(): Promise<ListPautaDto[]> {
-    const agendas: ListPautaDto[] = await this.prisma.pauta.findMany();
+    const agendas: ListPautaDto[] = await this.repository.findAll();
     if (agendas === null) {
       throw new NotFoundException('Nenhuma agenda foi encontrada')
     };          
@@ -39,12 +45,12 @@ export class PautaService {
   ////
   public async findAgendasByCategory(categoriaId: number): Promise<ListPautaDto[]> {
 
-      const category = await this.prisma.categoria.findUnique({ where: { id: categoriaId}});      
+      const category = await this.repositoryCategoria.findById({ where: { id: categoriaId}});      
       if (category === null) {
           throw new NotFoundException('Categoria não foi encontrada')
       };
   
-      const agendas = this.prisma.pauta.findMany({ where: {categoriaId: categoriaId}});
+      const agendas = this.repository.findById({ where: {categoriaId: categoriaId}});
       if (agendas === null) {
         throw new NotFoundException('Agenda não foi encontrada')
     };      

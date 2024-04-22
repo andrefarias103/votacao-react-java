@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaModule } from '../../prisma/prisma.module';
-import { PrismaService } from '../../prisma/prisma.service';
+import { TRepository } from '../../repository/repository';
 import { ListaUsuarioDTO } from '../dto/ListaUsuario.dto';
 import { CriaUsuarioDTO } from '../dto/cria-usuario.dto';
 import { PerfilUsuarioEnum } from '../enums/perfil-usuario.enum';
@@ -12,9 +11,9 @@ describe('UserController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule],
+      imports: [],
       controllers: [UsuarioController],
-      providers: [UsuarioService, PrismaService],
+      providers: [UsuarioService, TRepository],
     }).compile();
 
     userController = module.get<UsuarioController>(UsuarioController);

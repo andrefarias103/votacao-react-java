@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaModule } from '../../prisma/prisma.module';
+import { TRepository } from '../../repository/repository';
 import { CategoriaController } from '../categoria.controller';
-import { TRepository } from '../categoria.repository';
 import { CategoriaService } from '../categoria.service';
 import { CreateCategoriaDto } from '../dto/create-categoria.dto';
 import { ListCategoriaDto } from '../dto/select-categoria.dto';
@@ -11,7 +10,7 @@ describe('CategoriaController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule],
+      imports: [],
       controllers: [CategoriaController],
       providers: [CategoriaService, TRepository],
     }).compile();

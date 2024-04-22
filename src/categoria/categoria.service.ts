@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TRepository } from './categoria.repository';
+import { TRepository } from '../repository/repository';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { ListCategoriaDto } from './dto/select-categoria.dto';
 
