@@ -25,7 +25,7 @@ export class UsuarioService {
   async createUser(dadosUsuario: CriaUsuarioDTO): Promise<CriaUsuarioDTO> {
     try {
       const user: CriaUsuarioDTO = await this.repository.create({
-        data: {
+        //data: {
           login: dadosUsuario.login,
           senha: dadosUsuario.senha,
           nome: dadosUsuario.nome,
@@ -33,7 +33,7 @@ export class UsuarioService {
           email: dadosUsuario.email,
           cpf: dadosUsuario.cpf,
           tipo: dadosUsuario.tipo,
-        },
+        //},
       });
       return user;
     }

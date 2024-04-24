@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { TRepository } from 'src/repository/repository';
 import { VotacaoController } from './votacao.controller';
 import { VotacaoService } from './votacao.service';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [],
   controllers: [VotacaoController],
-  providers: [VotacaoService],
+  providers: [VotacaoService, TRepository],
 })
 export class VotacaoModule {}

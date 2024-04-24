@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TRepository } from '../repository/repository';
+import { getDateFinal, getDateFormat } from '../utils/date-operations.utils';
 import { CreateSessaoDto } from './dto/create-sessao.dto';
 import { ListSessaoDto } from './dto/select-sessao.dto';
-import { getDateFinal, getDateFormat } from './utils/date-operations.utils';
 
 @Injectable()
 export class SessaoService {
@@ -46,54 +46,53 @@ export class SessaoService {
   // }
   
   ////
-  public async createSession(pautaId: number, dadosSessao: CreateSessaoDto): Promise<CreateSessaoDto> {
+  public async createSession(agendaId: number, sessionData: CreateSessaoDto): Promise<CreateSessaoDto> {
     
-      const date_final: Date = getDateFinal(dadosSessao.dataHoraInicio, dadosSessao.dataHoraFim );
-      const date_initial = new Date(dadosSessao.dataHoraInicio);  
-      if (date_final <= date_initial) {
+      const agenda = await this.repositoryAgenda.findById({ id: agendaId});
+      if (agenda === null) { 
+        throw new NotFoundException(`Pauta [${agendaId}]: Não foi encontrada'`)
+      };
+    
+      const datetime_final: Date = getDateFinal(sessionData.dataHoraInicio, sessionData.dataHoraFim );
+      const datetime_initial = new Date(sessionData.dataHoraInicio);  
+      if (datetime_final <= datetime_initial) {
         throw new Error('Data hora final é menor ou igual a data hora inicial');
       }
-      const agenda = await this.repositoryAgenda.findById({ id: pautaId});
-      if (agenda === null) { 
-        throw new NotFoundException('Pauta não foi encontrada')
-      };
-      const session: CreateSessaoDto = await this.repository.create(
-        { dataHoraInicio: dadosSessao.dataHoraInicio, 
-                dataHoraFim: getDateFormat(date_final),
+
+      const createSession: CreateSessaoDto = await this.repository.create(
+        { dataHoraInicio: sessionData.dataHoraInicio, 
+                dataHoraFim: getDateFormat(datetime_final),
                 pauta: { connect: { id: agenda?.id }}, 
+                status: 'STATUS_INICIADA',
       });    
-      return session;
+      return createSession;
       
   }
 
-  ////
-  public async startSession(sessionId: number, agendaId: number): Promise<boolean> {
-    //try {    
+  
+  // public async startSession(sessionId: number, agendaId: number): Promise<boolean> {
 
-          const sessao = await this.repository.findById({ id: sessionId});
-          if (sessao === null) {            
-            throw new NotFoundException(`Sessão [${sessionId}]: Não foi encontrada'`)
-          };
+          
+  //         const sessao = await this.repository.findById({ id: sessionId});
+  //         if (sessao === null) {            
+  //           throw new NotFoundException(`Sessão [${sessionId}]: Não foi encontrada'`)
+  //         };
 
-          const agenda = await this.repositoryAgenda.findById({ id: agendaId});
-          if (agenda === null) { 
-            throw new NotFoundException(`Pauta [${agendaId}]: Não foi encontrada'`)
-          };          
+  //         const agenda = await this.repositoryAgenda.findById({ id: agendaId});
+  //         if (agenda === null) { 
+  //           throw new NotFoundException(`Pauta [${agendaId}]: Não foi encontrada'`)
+  //         };          
 
-          await this.repository.update( {
-                                          status: 'STATUS_INICIADA',
-                                        },
-                                        { 
-                                          id: sessionId, pautaId: agendaId 
-                                        },);
+  //         await this.repository.update( {
+  //                                         status: 'STATUS_INICIADA',
+  //                                       },
+  //                                       { 
+  //                                         id: sessionId, pautaId: agendaId 
+  //                                       },);
 
-          return true;
-    // }
-    // catch(error) {
-    //   console.log(error);
-    //   return false;
-    // }
-  }
+  //         return true;
+
+  // }
 
   ////
   public async findAllSessions(): Promise<ListSessaoDto[]> {

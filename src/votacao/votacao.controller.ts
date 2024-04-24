@@ -8,7 +8,7 @@ export class VotacaoController {
   constructor(private readonly votacaoService: VotacaoService) {}
 
   @Post()
-  public async createVotacao(@Query('usuarioId') usuarioId: number, @Query('pautaId') pautaId: number, @Body() dadosVotacao: CreateVotacaoDto): Promise<CreateVotacaoDto> {
+  public async createVotacao(@Query('usuarioId') usuarioId: number, @Query('pautaId') pautaId: number, @Body() dadosVotacao: CreateVotacaoDto) {
     return await this.votacaoService.createVotacao(usuarioId, pautaId, dadosVotacao);
   }
 
@@ -22,6 +22,12 @@ export class VotacaoController {
     return this.votacaoService.findOne(+id);
   }
 
+  @Get('total_votes/:agendaId')
+  public async getTotalVotes(@Param('agendaId') agendaId: number): Promise<number> {
+    const totalVotes = await this.votacaoService.getTotalVotes(agendaId);
+    return totalVotes;
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateVotacaoDto: UpdateVotacaoDto) {
     return this.votacaoService.update(+id, updateVotacaoDto);
@@ -31,4 +37,6 @@ export class VotacaoController {
   remove(@Param('id') id: string) {
     return this.votacaoService.remove(+id);
   }
+
+
 }

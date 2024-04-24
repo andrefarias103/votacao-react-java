@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export class TRepository {
     constructor(private readonly modelName: string) {
-        this.modelName = modelName;
+      this.modelName = modelName;
     }
 
     public async create(dataModel: any) {
@@ -24,6 +24,13 @@ export class TRepository {
             where: dataModel
           });
       }
+
+      public async recordCountById(dataModel: any): Promise<number> {
+        return await prisma[this.modelName].count({
+                                                   where: dataModel   
+                                                  });
+      }
+
 
       // public async generateSeed() {
       //   const users = await prisma.usuario.findMany();
@@ -47,8 +54,6 @@ export class TRepository {
       //   }
 
       public async update(dataModel: any, filter: any) {
-        console.log(dataModel);
-        console.log(filter);
         return await prisma[this.modelName].update({ 
           data: dataModel,        
           where: filter

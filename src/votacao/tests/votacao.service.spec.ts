@@ -1,14 +1,13 @@
-import { PrismaService } from '../../prisma/prisma.service';
+import { TRepository } from '../../repository/repository';
 import { CreateVotacaoDto } from '../dto/create-votacao.dto';
 import { VotacaoService } from '../votacao.service';
 
 describe('VotacaoService', () => {
   let service: VotacaoService;
-  let prismaService: PrismaService;
+  let repository: TRepository;
 
   beforeEach(async () => {
-    prismaService = new PrismaService();
-    service = new VotacaoService(prismaService);
+    service = new VotacaoService(repository);
     });
 
   it('should be defined', () => {

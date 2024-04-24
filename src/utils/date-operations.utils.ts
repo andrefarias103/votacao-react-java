@@ -1,3 +1,4 @@
+
 export function getDateFormat( date: Date): string {     
     const dateFormat = date.toLocaleString('pt-BR', {
         year: 'numeric',
@@ -26,3 +27,13 @@ export function getDateFormat( date: Date): string {
     }    
     return dte_final;
   }
+
+  // export function verifyDateActualIsMinorDateInitial(datetime_initial: string): boolean {
+
+  //   const momentInitial = moment(datetime_initial, 'YYYY-MM-DD HH:mm:ss');
+  //   console.log(`1: ${momentInitial}`);
+  //   const momentActual = moment(Date.now());
+  //   console.log(`1: ${momentActual}`);
+  //   return momentActual.isBefore(momentInitial);
+
+  // }

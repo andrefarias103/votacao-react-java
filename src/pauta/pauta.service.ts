@@ -15,7 +15,7 @@ export class PautaService {
 
   ////
   public async createAgenda(categoriaId: number, dadosPauta: CreatePautaDto): Promise<CreatePautaDto> {
-    const category = await this.repositoryCategoria.findById({ where: { id: categoriaId}});
+    const category = await this.repositoryCategoria.findById({ id: categoriaId});
     if (category === null) { throw new NotFoundException('Categoria não foi encontrada')};
 
     const agenda: CreatePautaDto = await this.repository.create(
@@ -45,12 +45,12 @@ export class PautaService {
   ////
   public async findAgendasByCategory(categoriaId: number): Promise<ListPautaDto[]> {
 
-      const category = await this.repositoryCategoria.findById({ where: { id: categoriaId}});      
+      const category = await this.repositoryCategoria.findById({ id: categoriaId});      
       if (category === null) {
           throw new NotFoundException('Categoria não foi encontrada')
       };
   
-      const agendas = this.repository.findById({ where: {categoriaId: categoriaId}});
+      const agendas = this.repository.findById({ categoriaId: categoriaId});
       if (agendas === null) {
         throw new NotFoundException('Agenda não foi encontrada')
     };      

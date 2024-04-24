@@ -1,40 +1,70 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { TRepository } from '../repository/repository';
+import { getDateFormat } from '../utils/date-operations.utils';
 import { CreateVotacaoDto } from './dto/create-votacao.dto';
 import { UpdateVotacaoDto } from './dto/update-votacao.dto';
 
 @Injectable()
 export class VotacaoService {
-    constructor(private readonly prisma: PrismaService) {}
 
-  async createVotacao(usuarioId: number, pautaId: number, dadosVotacao: CreateVotacaoDto): Promise<CreateVotacaoDto> {
-    try {
-      const user = await this.prisma.usuario.findUnique({ where: { id: usuarioId}});
+    private readonly repositoryUser: TRepository;
+    private readonly repositoryAgenda: TRepository;
+
+    constructor(private readonly repository: TRepository) {
+      this.repositoryUser = new TRepository('usuario');
+      this.repositoryAgenda = new TRepository('pauta');      
+      this.repository = new TRepository('Votacao');      
+    }
+
+  async createVotacao(usuarioId: number, pautaId: number, dadosVotacao: CreateVotacaoDto) {
+
+      const user = await this.repositoryUser.findById({ id: usuarioId});
       if (user === null) { 
         throw new NotFoundException('Usuário não foi encontrado')
       };
   
-      const agenda = await this.prisma.pauta.findUnique({ where: { id: pautaId}});
+      const agenda = await this.repositoryAgenda.findById({  id: pautaId });
       if (agenda === null) { 
         throw new NotFoundException('Pauta não foi encontrada')
       };
-  
-      const vote: CreateVotacaoDto = await this.prisma.votacao.create({
-        data: {
+
+      const userVoted = await this.repository.findById({ id: user.id, pautaId: agenda.id });
+      if (userVoted !== null) { 
+        throw new Error(`Usuário [${user.nome}]: já votou!!!'`)
+      };
+
+      const datatime_now = new Date(Date.now());      
+      const vote: CreateVotacaoDto = await this.repository.create({
           opcaoVotada: dadosVotacao.opcaoVotada,
-          dataHoraVoto: new Date(Date.now()).toLocaleString(),
+          dataHoraVoto: getDateFormat(datatime_now),
           usuarioId: usuarioId,
           pautaId: pautaId,
-        },
       });
 
       return vote;
-    }
-    catch(error) {
-      console.error('Erro ao executar votação:', error);
-      throw error;      
-    }
   }
+
+
+  async getTotalVotes(agendaId: number): Promise<number>  {
+
+    const agenda = await this.repositoryAgenda.findById({ id: agendaId});
+    if (agenda === null) { 
+      throw new NotFoundException(`Pauta [${agendaId}]: não encontrada'`)
+    };
+
+    const totalVotes = await this.repository.recordCountById({ pautaId: agendaId });
+    console.log(`Total de Votos: ${totalVotes}`);
+
+    const totalVotesYes = await this.repository.recordCountById({ pautaId: agendaId, opcaoVotada: 'Sim' });
+    console.log(`Total de Votos (Sim): ${totalVotesYes}`);
+
+    const totalVotesNo = await this.repository.recordCountById({ pautaId: agendaId, opcaoVotada: 'Não' });
+    console.log(`Total de Votos (Não): ${totalVotesNo}`);
+    return totalVotes;
+  }
+
+
+
 
   findAll() {
     return `This action returns all votacao`;
