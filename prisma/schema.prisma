@@ -1,74 +1,76 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/prisma/seed"
+        provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = "postgresql://root:root@localhost:5432/db_votacao_pautas?schema=public"
+        provider = "postgresql"
+        url      = env("DATABASE_URL")
 }
 
 model Usuario {
-        id          Int      @id @default(autoincrement())
-        login       String
-        senha       String
-        nome        String
-        endereco    String
-        email       String
-        cpf         String
-        tipo        String
-        voto        Votacao[]  @relation("usuario")
-        createdAt   DateTime @default(now())
-        updatedAt   DateTime @default(now())
-        deletedAt   DateTime @default(now())
+        id        Int       @id @default(autoincrement())
+        login     String
+        senha     String
+        nome      String
+        endereco  String
+        email     String
+        cpf       String
+        tipo      String
+        voto      Votacao[] @relation("usuario")
+        Pauta     Pauta[]
+        createdAt DateTime  @default(now())
+        updatedAt DateTime  @default(now())
+        deletedAt DateTime  @default(now())
 }
 
 model Votacao {
-        id           Int        @id @default(autoincrement())
-        usuario      Usuario    @relation("usuario", fields: [usuarioId], references: [id], onDelete: Cascade)
+        id           Int      @id @default(autoincrement())
+        usuario      Usuario  @relation("usuario", fields: [usuarioId], references: [id], onDelete: Cascade)
         usuarioId    Int
-        opcaoVotada  String     @default("Não")   
+        opcaoVotada  String   @default("Não")
         dataHoraVoto String
-        pauta        Pauta      @relation("pauta", fields: [pautaId], references: [id], onDelete: Cascade)
+        pauta        Pauta    @relation("pauta", fields: [pautaId], references: [id], onDelete: Cascade)
         pautaId      Int
-        createdAt   DateTime @default(now())
-        updatedAt   DateTime @default(now())
-        deletedAt   DateTime @default(now())        
+        createdAt    DateTime @default(now())
+        updatedAt    DateTime @default(now())
+        deletedAt    DateTime @default(now())
 }
 
 model Pauta {
         id          Int        @id @default(autoincrement())
-        titulo      String     
+        titulo      String
         descricao   String
-        categoria   Categoria?  @relation("categoria", fields: [categoriaId], references: [id], onDelete: Cascade)
-        categoriaId Int        
-        sessaoId    Int?     @unique
-        sessao      Sessao?
+        categoria   Categoria? @relation("categoria", fields: [categoriaId], references: [id], onDelete: Cascade)
+        categoriaId Int
+        Sessao      Sessao[]
         votacao     Votacao[]  @relation("pauta")
-        createdAt   DateTime @default(now())
-        updatedAt   DateTime @default(now())
-        deletedAt   DateTime @default(now())        
+        usuario     Usuario    @relation(fields: [usuarioId], references: [id])
+        usuarioId   Int
+        createdAt   DateTime   @default(now())
+        updatedAt   DateTime   @default(now())
+        deletedAt   DateTime   @default(now())
 }
+
 model Categoria {
-        id          Int      @id @default(autoincrement())
-        nome        String   @unique
-        descricao   String
-        pautas      Pauta[]  @relation("categoria") 
-        createdAt   DateTime @default(now())
-        updatedAt   DateTime @default(now())
-        deletedAt   DateTime @default(now())
+        id        Int      @id @default(autoincrement())
+        nome      String   @unique
+        descricao String
+        pautas    Pauta[]  @relation("categoria")
+        createdAt DateTime @default(now())
+        updatedAt DateTime @default(now())
+        deletedAt DateTime @default(now())
 }
 
 model Sessao {
-        id          Int      @id @default(autoincrement())          
-        pauta       Pauta? @relation(fields: [pautaId], references: [id])
-        pautaId     Int?   @unique
-        dataHoraInicio   String
-        dataHoraFim   String
-        status      StatusSessaoEnum?   @default(STATUS_AGUARDANDO)
-        createdAt   DateTime @default(now())
-        updatedAt   DateTime @default(now())
-        deletedAt   DateTime @default(now())          
+        id             Int               @id @default(autoincrement())
+        Pauta          Pauta?            @relation(fields: [pautaId], references: [id])
+        pautaId        Int?
+        dataHoraInicio String
+        dataHoraFim    String
+        status         StatusSessaoEnum? @default(STATUS_AGUARDANDO)
+        createdAt      DateTime          @default(now())
+        updatedAt      DateTime          @default(now())
+        deletedAt      DateTime          @default(now())
 }
 
 enum StatusSessaoEnum {
@@ -77,8 +79,3 @@ enum StatusSessaoEnum {
         STATUS_CONCLUIDA
         STATUS_CANCELADA
 }
-
-
-
-
-

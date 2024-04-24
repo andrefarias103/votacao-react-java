@@ -1,21 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TRepository } from '../../repository/repository';
-import { CategoriaController } from '../categoria.controller';
-import { CategoriaService } from '../categoria.service';
-import { CreateCategoriaDto } from '../dto/create-categoria.dto';
-import { ListCategoriaDto } from '../dto/select-categoria.dto';
+import { CategoryController } from '../category.controller';
+import { CategoryService } from '../category.service';
+import { CreateCategoryDto } from '../dto/create-categoria.dto';
+import { ListCategoryDto } from '../dto/select-categoria.dto';
 
-describe('CategoriaController', () => {
-  let controller: CategoriaController;
+describe('CategoryController', () => {
+  let controller: CategoryController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      controllers: [CategoriaController],
-      providers: [CategoriaService, TRepository],
+      controllers: [CategoryController],
+      providers: [CategoryService, TRepository],
     }).compile();
 
-    controller = module.get<CategoriaController>(CategoriaController);
+    controller = module.get<CategoryController>(CategoryController);
   });
 
   it('should be defined', () => {
@@ -24,7 +24,7 @@ describe('CategoriaController', () => {
 
   describe('create Category', () => {
     it('should create category', async () => {
-      const mockCategoryDto: CreateCategoriaDto = {
+      const mockCategoryDto: CreateCategoryDto = {
         nome: 'Assembleia Sindical',
         descricao: 'Pautas sobre questões relacionadas a sindicato',
       };
@@ -39,7 +39,7 @@ describe('CategoriaController', () => {
 
   describe('find all categories', () => {
     it('should return all categories', async () => {
-      const mockCategoriesDto: ListCategoriaDto[] = [
+      const mockCategoriesDto: ListCategoryDto[] = [
         {
           nome: 'Assembleia Sindical',
           descricao:

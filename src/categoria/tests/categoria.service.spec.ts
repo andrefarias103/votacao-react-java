@@ -1,14 +1,14 @@
 import { TRepository } from '../../repository/repository';
-import { CategoriaService } from '../categoria.service';
-import { CreateCategoriaDto } from '../dto/create-categoria.dto';
-import { ListCategoriaDto } from '../dto/select-categoria.dto';
+import { CategoryService } from '../category.service';
+import { CreateCategoryDto } from '../dto/create-categoria.dto';
+import { ListCategoryDto } from '../dto/select-categoria.dto';
 
-describe('CategoriaService', () => {
-  let service: CategoriaService;
+describe('CategoryService', () => {
+  let service: CategoryService;
   let repository: TRepository;
 
   beforeEach(async () => {
-    service = new CategoriaService(repository);
+    service = new CategoryService(repository);
   });
 
   it('should be defined', () => {
@@ -17,7 +17,7 @@ describe('CategoriaService', () => {
 
   describe('create Category', () => {
     it('should create category', async () => {
-      const mockCategoryDto: CreateCategoriaDto = {
+      const mockCategoryDto: CreateCategoryDto = {
         nome: 'Assembleia Sindical',
         descricao:
           'Categoria que define pautas relacionadas a Assembleia Sindical',
@@ -31,7 +31,7 @@ describe('CategoriaService', () => {
 
   describe('find All Categories', () => {
     it('should return all categories', async () => {
-      const mockCategoriesDto: ListCategoriaDto[] = [
+      const mockCategoriesDto: ListCategoryDto[] = [
         {
           nome: 'Assembleia Sindical',
           descricao:

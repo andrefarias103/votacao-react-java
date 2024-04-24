@@ -2,7 +2,7 @@ import { Exclude, Expose } from 'class-transformer';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 @Exclude()
-export class CreateCategoriaDto {
+export class CreateCategoryDto {
   @Expose()
   @IsNotEmpty()
   nome: string;

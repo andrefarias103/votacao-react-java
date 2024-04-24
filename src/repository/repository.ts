@@ -8,24 +8,25 @@ export class TRepository {
       this.modelName = modelName;
     }
 
-    public async create(dataModel: any) {
+    public async create<T>(dataModel:T) {
         const model = await prisma[this.modelName].create({
           data: dataModel,
         });    
         return model;
       }    
 
-      public async findAll(): Promise<any[]> {
-        return await prisma[this.modelName].findMany();
+      public async findAll<T>(): Promise<T[]> 
+      {
+        return  await prisma[this.modelName].findMany();
       }
 
-      public async findById(dataModel: any) {
+      public async findById<T>(dataModel:T) {
         return await prisma[this.modelName].findUnique({ 
             where: dataModel
           });
       }
 
-      public async recordCountById(dataModel: any): Promise<number> {
+      public async recordCountById<T>(dataModel: T): Promise<number> {
         return await prisma[this.modelName].count({
                                                    where: dataModel   
                                                   });
@@ -53,7 +54,7 @@ export class TRepository {
       //   console.log('Arquivo de seed gerado com sucesso!');
       //   }
 
-      public async update(dataModel: any, filter: any) {
+      public async update<T> (dataModel: T, filter: T) {
         return await prisma[this.modelName].update({ 
           data: dataModel,        
           where: filter

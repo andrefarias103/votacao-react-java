@@ -1,9 +1,9 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { ArrayMinSize, IsArray, IsOptional, ValidateNested } from 'class-validator';
-import { ListPautaDto } from '../../pauta/dto/select-pauta.dto';
+import { ListAgendaDto } from '../../pauta/dto/select-agenda.dto';
 
 @Exclude()
-export class ListCategoriaDto {
+export class ListCategoryDto {
   @Expose()
   nome: string;
 
@@ -15,6 +15,6 @@ export class ListCategoriaDto {
   @ValidateNested()
   @ArrayMinSize(0)
   @IsArray()
-  @Type(() => ListPautaDto)
-  pauta?: ListPautaDto[]
+  @Type(() => ListAgendaDto)
+  pauta?: ListAgendaDto[]
 }

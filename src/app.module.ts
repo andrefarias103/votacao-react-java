@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { CategoriaModule } from './categoria/categoria.module';
-import { PautaModule } from './pauta/pauta.module';
-import { UsuarioModule } from './usuario/usuario.module';
-import { SessaoModule } from './sessao/sessao.module';
-import { VotacaoModule } from './votacao/votacao.module';
+import { CategoryModule } from './categoria/category.module';
+import { PautaModule } from './pauta/agenda.module';
+import { SessaoModule } from './sessao/session.module';
+import { UserModule } from './usuario/user.module';
+import { VotacaoModule } from './votacao/votation.module';
 
 @Module({
-  imports: [UsuarioModule, ConfigModule.forRoot({ isGlobal: true }), CategoriaModule, PautaModule, SessaoModule, VotacaoModule],
+  imports: [UserModule, ConfigModule.forRoot({ isGlobal: true }), CategoryModule, PautaModule, SessaoModule, VotacaoModule],
   controllers: [],
   providers: [],
 })
