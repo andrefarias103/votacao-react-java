@@ -25,6 +25,7 @@ describe('UserController', () => {
 
   describe('create User', () => {
     it('should create user', async () => {
+      const userId: number = 1;
       const mockUserDto: CreateUserDTO = {
         login: 'jcl',
         senha: 'teste123',
@@ -36,7 +37,7 @@ describe('UserController', () => {
       };
       jest.spyOn(userController, 'createUser').mockResolvedValue(mockUserDto);
 
-      const createUser = await userController.createUser(mockUserDto);
+      const createUser = await userController.createUser(userId, mockUserDto);
       expect(createUser).toEqual(mockUserDto);
     });
   });

@@ -9,4 +9,4 @@ import { SessionService } from './session.service';
   providers: [SessionService, TRepository],
   exports: [SessionService]
 })
-export class SessaoModule {}
+export class SessionModule {}

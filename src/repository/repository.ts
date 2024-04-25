@@ -26,6 +26,12 @@ export class TRepository {
           });
       }
 
+      public async findByWhere<T>(dataModel:T) {
+        return await prisma[this.modelName].findMany({ 
+            where: dataModel
+          });
+      }
+    
       public async recordCountById<T>(dataModel: T): Promise<number> {
         return await prisma[this.modelName].count({
                                                    where: dataModel   

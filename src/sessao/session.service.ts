@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { StatusSessaoEnum } from '@prisma/client';
 import { TRepository } from '../repository/repository';
 import { getDateFinal, getDateFormat } from '../utils/date-operations.utils';
 import { CreateSessionDto } from './dto/create-session.dto';
@@ -9,41 +10,11 @@ export class SessionService {
 
   private readonly repositoryAgenda: TRepository;
 
+  ////
   constructor(private readonly repository: TRepository) {
     this.repository = new TRepository('sessao');
     this.repositoryAgenda = new TRepository('pauta');
   }
-
-  // ////
-  // private getDateFinal(date_initial: string, date_final: string): Date {    
-  //   const dt_initial = new Date(date_initial);
-  //   let dte_final: Date;
-  //   if (date_final === undefined) {
-  //     dte_final = new Date(dt_initial.setMinutes(dt_initial.getMinutes() + 1));        
-  //   }
-  //   else {
-  //     dte_final = new Date(date_final);
-  //   }    
-  //   return dte_final;
-  // }
-
-  // ////
-  // private getDateFormat( date: Date): string {     
-  //   const dateFormat = date.toLocaleString('pt-BR', {
-  //       year: 'numeric',
-  //       month: '2-digit',
-  //       day: '2-digit',
-  //       hour: '2-digit',
-  //       minute: '2-digit',
-  //       second: '2-digit',
-  //       hour12: false, 
-  //   });
-  //   const splitDate = dateFormat.split(', ');
-  //   const partDate = splitDate[0].split('/');
-  //   const partHour = splitDate[1].split(':');
-  //   const dateFormatted = `${partDate[2]}-${partDate[1]}-${partDate[0]} ${partHour.join(':')}`;    
-  //   return dateFormatted;
-  // }
   
   ////
   public async createSession(agendaId: number, sessionData: CreateSessionDto): Promise<CreateSessionDto> {
@@ -60,39 +31,51 @@ export class SessionService {
       }
 
       const createSession: CreateSessionDto = await this.repository.create(
-        { dataHoraInicio: sessionData.dataHoraInicio, 
+        { 
+                dataHoraInicio: sessionData.dataHoraInicio, 
                 dataHoraFim: getDateFormat(datetime_final),
-                pauta: { connect: { id: agenda?.id }}, 
-                status: 'STATUS_INICIADA',
+                Pauta: { connect: { id: agenda?.id }}, 
+                status: StatusSessaoEnum.STATUS_AGUARDANDO,
       });    
       return createSession;
       
   }
 
-  
-  // public async startSession(sessionId: number, agendaId: number): Promise<boolean> {
+  ////
+  public async startAllSessions(): Promise<Boolean>  {
+    const dataAtual =  getDateFormat(new Date(Date.now())); //.toISOString().split('T')[0];
+    console.log(`******************************************verifca data e hora ${dataAtual}`);
+    const sessions = await this.repository.findByWhere({ 
+                                                          status: StatusSessaoEnum.STATUS_AGUARDANDO,
+                                                          dataHoraInicio: { lte: dataAtual},
+                                                          dataHoraFim: { gte: dataAtual}
+                                                        });
+    if (sessions === null) {                                             
+      return false;
+    }
 
-          
-  //         const sessao = await this.repository.findById({ id: sessionId});
-  //         if (sessao === null) {            
-  //           throw new NotFoundException(`Sessão [${sessionId}]: Não foi encontrada'`)
-  //         };
+    sessions.map( (session) => { 
+      this.repository.update({ status: StatusSessaoEnum.STATUS_INICIADA}, { id: session.id});        
+    });
 
-  //         const agenda = await this.repositoryAgenda.findById({ id: agendaId});
-  //         if (agenda === null) { 
-  //           throw new NotFoundException(`Pauta [${agendaId}]: Não foi encontrada'`)
-  //         };          
+    return true;
 
-  //         await this.repository.update( {
-  //                                         status: 'STATUS_INICIADA',
-  //                                       },
-  //                                       { 
-  //                                         id: sessionId, pautaId: agendaId 
-  //                                       },);
+  }  
 
-  //         return true;
-
-  // }
+  ////
+  public async finishAllSessions() {
+    const dataAtual =  getDateFormat(new Date(Date.now())); //.toISOString().split('T')[0];
+    const sessions = await this.repository.findByWhere({ 
+                                                          status: StatusSessaoEnum.STATUS_INICIADA,
+                                                          dataHoraInicio: { lte: dataAtual},
+                                                          dataHoraFim: { lte: dataAtual}
+                                                        });
+    if (sessions !== null) {
+      return sessions.map( (session) => { 
+        this.repository.update({ status: StatusSessaoEnum.STATUS_CONCLUIDA}, { id: session.id});
+      })
+    }
+  }
 
   ////
   public async findAllSessions(): Promise<ListSessionDto[]> {

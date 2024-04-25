@@ -8,4 +8,4 @@ import { VotationService } from './votation.service';
   controllers: [VotationController],
   providers: [VotationService, TRepository],
 })
-export class VotacaoModule {}
+export class VotationModule {}

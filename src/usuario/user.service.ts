@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { TRepository } from '../repository/repository';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { ListUserDTO } from './dto/select-user.dto';
+import { UserPerfilEnum } from './enums/user-perfil.enum';
 
 @Injectable()
 export class UserService {
@@ -22,8 +23,18 @@ export class UserService {
     }));
   }
 
-  async createUser(dataUser: CreateUserDTO): Promise<CreateUserDTO> {
+  async createUser(userId: number, dataUser: CreateUserDTO): Promise<CreateUserDTO> {
     try {
+
+      const memberUser = await this.repository.findById({ id: userId});
+      if (memberUser === null) {
+        throw new NotFoundException('Usuário administrador foi encontrado');
+      }  
+
+      if (memberUser.tipo === UserPerfilEnum.PERFIL_USUARIO_COMUM) {
+        throw new HttpException(`O usuário ${memberUser.nome} não tem permissões de cadastrar usuário`, HttpStatus.FORBIDDEN);
+      }
+
       const user: CreateUserDTO = await this.repository.create({        
           login: dataUser.login,
           senha: dataUser.senha,

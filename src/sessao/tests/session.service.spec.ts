@@ -1,3 +1,4 @@
+import { StatusSessaoEnum } from "@prisma/client";
 import { TRepository } from "../../repository/repository";
 import { CreateSessionDto } from "../dto/create-session.dto";
 import { ListSessionDto } from "../dto/select-session.dto";
@@ -41,6 +42,98 @@ describe('SessionService', () => {
 
         })           
     })
+
+    const mockStartSessionFunction = jest.fn((mockDataHoraAtual: Date, ) => {
+        
+        const mockSessionR = {
+            id: 1,
+            dataHoraInicio: '2024-04-25 10:00:00',
+            status: StatusSessaoEnum.STATUS_AGUARDANDO,
+        };
+        if (new Date(mockSessionR.dataHoraInicio) <= mockDataHoraAtual) 
+            { 
+                return { 
+                    ...mockSessionR,
+                    status: StatusSessaoEnum.STATUS_INICIADA,                                 
+                    }
+                }
+        return {status: StatusSessaoEnum.STATUS_AGUARDANDO, }
+
+    });    
+    
+
+    const mockFinishSessionFunction = jest.fn((mockDataHoraAtual: Date) => {        
+        const mockSessionR = {
+            id: 1,
+            dataHoraInicio: '2024-04-25 10:00:00',
+            dataHoraFim: '2024-04-25 13:00:00',
+            status: StatusSessaoEnum.STATUS_INICIADA,
+        };
+        if ((new Date(mockSessionR.dataHoraInicio) <= mockDataHoraAtual) && (new Date(mockSessionR.dataHoraFim) <= mockDataHoraAtual ))
+            { 
+                return { 
+                    ...mockSessionR,
+                    status: StatusSessaoEnum.STATUS_CONCLUIDA,                                 
+                    }
+                }
+        return {status: StatusSessaoEnum.STATUS_INICIADA, }
+
+    });        
+     
+    describe('start sessions', () => {
+     
+        it('should start session', async () => {
+            
+            const mockSession = StatusSessaoEnum.STATUS_INICIADA;
+
+            const mockDataHoraAtual = new Date('2024-04-25 12:00:00');
+
+            const result = mockStartSessionFunction(mockDataHoraAtual).status; 
+
+           expect(result).toBe(mockSession);
+                        
+        })
+
+        it('should not start session', async () => {
+            
+            const mockSession = StatusSessaoEnum.STATUS_AGUARDANDO;
+
+            const mockDataHoraAtual = new Date('2024-04-25 08:00:00');
+
+            const result = mockStartSessionFunction(mockDataHoraAtual).status; 
+
+           expect(result).toBe(mockSession);
+                        
+        })
+    })
+
+
+    describe('finish sessions', () => {
+     
+        it('should finish session', async () => {
+            
+            const mockSession = StatusSessaoEnum.STATUS_CONCLUIDA;
+
+            const mockDataHoraAtual = new Date('2024-04-25 13:30:00');
+
+            const result = mockFinishSessionFunction(mockDataHoraAtual).status; 
+
+           expect(result).toBe(mockSession);
+                        
+        })
+
+        it('should not finish session', async () => {
+            
+            const mockSession = StatusSessaoEnum.STATUS_INICIADA;
+
+            const mockDataHoraAtual = new Date('2024-04-25 12:00:00');
+
+            const result = mockFinishSessionFunction(mockDataHoraAtual).status; 
+
+           expect(result).toBe(mockSession);
+                        
+        })        
+    })    
 
     // describe('start sessions', () => {
     //     it('should not find session', async () => {

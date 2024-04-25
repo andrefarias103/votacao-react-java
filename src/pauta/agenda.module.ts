@@ -9,4 +9,4 @@ import { AgendaService } from './agenda.service';
   providers: [AgendaService, TRepository],
   exports: [AgendaService],
 })
-export class PautaModule {}
+export class AgendaModule {}
