@@ -60,7 +60,7 @@ export class AgendaService {
   ////
   public async findAgendasByCategory(categoryId: number): Promise<ListAgendaDto[]> {
 
-      const category = await this.repositoryCategory.findById({ id: categoryId});      
+     const category = await this.repositoryCategory.findById({ id: categoryId});      
       if (category === null) {
           throw new NotFoundException('Categoria não foi encontrada')
       };
@@ -69,17 +69,19 @@ export class AgendaService {
       if (agendas === null) {
         throw new NotFoundException('Agenda não foi encontrada')
     };      
-  
-      console.log(agendas);
    
-      return agendas;
+     return agendas;      
   }
 
-  // update(id: number, updatePautaDto: UpdatePautaDto) {
-  //   return `This action updates a #${id} pauta`;
-  // }
+  ////
+  public async findAgenda(agendaId: number): Promise<ListAgendaDto>
+  {
+    const agenda = await this.repositoryAgenda.findById({ id: agendaId});
+    if (agenda === null) {
+      throw new NotFoundException('Agenda não foi encontrada')
+    };
+    return agenda;    
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} pauta`;
-  // }
+
 }

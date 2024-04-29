@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { StatusSessaoEnum } from '@prisma/client';
 import { TRepository } from '../repository/repository';
 import { getDateFormat } from '../utils/date-operations.utils';
 import { CreateVotationDto } from './dto/create-votation.dto';
@@ -9,14 +10,16 @@ export class VotationService {
 
     private readonly repositoryUser: TRepository;
     private readonly repositoryAgenda: TRepository;
+    private readonly repositorySession: TRepository;
 
     constructor(private readonly repository: TRepository) {
       this.repositoryUser = new TRepository('usuario');
       this.repositoryAgenda = new TRepository('pauta');      
-      this.repository = new TRepository('Votacao');      
+      this.repository = new TRepository('Votacao');    
+      this.repositorySession = new TRepository('Session');
     }
 
-  async createVotacao(userId: number, agendaId: number, dataVotation: CreateVotationDto) {
+  async createVotacao(userId: number, agendaId: number, sessionId: number, dataVotation: CreateVotationDto) {
 
       const user = await this.repositoryUser.findById({ id: userId});
       if (user === null) { 
@@ -27,6 +30,15 @@ export class VotationService {
       if (agenda === null) { 
         throw new NotFoundException('Pauta não foi encontrada')
       };
+
+      const session = await this.repositorySession.findById({ id: sessionId});
+      if (session === null) { 
+        throw new NotFoundException('Sessão não foi encontrada')
+      };
+
+      if (session.status !== StatusSessaoEnum.STATUS_INICIADA) {
+        throw new HttpException('Sessão não está disponível para votação', HttpStatus.FORBIDDEN);
+      }
 
       const userVoted = await this.repository.findById({ id: user.id, pautaId: agenda.id });
       if (userVoted !== null) { 

@@ -8,7 +8,7 @@ export class AgendaController {
   constructor(private readonly agendaService: AgendaService) {}
 
   @Post()
-  async createAgenda(@Query('userId') userId: number, @Query('categoriaId') categoryId: number, @Body() dataAgenda: CreateAgendaDto): Promise<CreateAgendaDto> {
+  async createAgenda(@Query('usuarioId') userId: number, @Query('categoriaId') categoryId: number, @Body() dataAgenda: CreateAgendaDto): Promise<CreateAgendaDto> {
     const agenda: CreateAgendaDto = await this.agendaService.createAgenda(userId, categoryId, dataAgenda);
     return agenda;
   }
@@ -23,13 +23,10 @@ export class AgendaController {
     return await this.agendaService.findAgendasByCategory(categoryId);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePautaDto: UpdatePautaDto) {
-  //   return this.pautaService.update(+id, updatePautaDto);
-  // }
+  @Get('/:pautaId')
+  async findAgenda(@Param('pautaId') agendaId: number) {
+    return await this.agendaService.findAgenda(agendaId);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.pautaService.remove(+id);
-  // }
+
 }

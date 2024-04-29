@@ -1,4 +1,4 @@
-import { HttpException } from '@nestjs/common';
+import { HttpException, NotFoundException } from '@nestjs/common';
 import { TRepository } from '../../repository/repository';
 import { AgendaService } from '../agenda.service';
 import { CreateAgendaDto } from '../dto/create-agenda.dto';
@@ -97,5 +97,30 @@ describe('AgendaService', () => {
       expect(result[1].categoriaId).toBe(1);      
     })
   })
+
+  describe('find agenda data', () => {
+    it('should return agenda data', async () => {
+      const agendaId: number = 1;
+      const mockAgendaDto: ListAgendaDto = {          
+                                              titulo: 'Votação do reajuste do vale-refeição',
+                                              descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários', 
+                                              categoriaId: 1,    
+                                            };
+       jest.spyOn(service,'findAgenda').mockResolvedValue(mockAgendaDto);
+       const result: ListAgendaDto = await service.findAgenda(agendaId);
+       expect(result.titulo).toBe('Votação do reajuste do vale-refeição');
+       expect(result.descricao).toBe('Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários')              
+    });
+
+    it('should not return agenda data', async () => {
+      const agendaId: number = 144;
+      const mockAgendaDto: ListAgendaDto = {          
+        titulo: 'Votação do reajuste do vale-refeição',
+        descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários', 
+        categoriaId: 1,    
+      };
+      await expect(service.findAgenda(agendaId)).rejects.toThrow(NotFoundException);     
+    })
+  });
 
 });
