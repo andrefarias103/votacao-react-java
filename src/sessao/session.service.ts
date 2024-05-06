@@ -44,7 +44,7 @@ export class SessionService {
   ////
   public async startAllSessions(): Promise<Boolean>  {
     const dataAtual =  getDateFormat(new Date(Date.now())); //.toISOString().split('T')[0];
-    console.log(`******************************************verifca data e hora ${dataAtual}`);
+    // console.log(`******************************************verifca data e hora ${dataAtual}`);
     const sessions = await this.repository.findByWhere({ 
                                                           status: StatusSessaoEnum.STATUS_AGUARDANDO,
                                                           dataHoraInicio: { lte: dataAtual},
@@ -88,6 +88,17 @@ export class SessionService {
       dataHoraFim: session.dataHoraFim,
       status: session.status
     }));
+  }
+
+  ////
+  public async findSessionByAgenda(agendaId: number): Promise<ListSessionDto[]> {
+
+    const sessions = this.repository.findById({ agendaId: agendaId});
+    if (sessions === null) {
+      throw new NotFoundException('Sessões não foram encontradas')
+  };      
+ 
+   return sessions;   
   }
 
 }

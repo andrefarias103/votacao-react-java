@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { ListSessionDto } from './dto/select-session.dto';
 import { SessionService } from './session.service';
@@ -16,6 +16,11 @@ export class SessionController {
   @Get()
   async findAllSessions(): Promise<ListSessionDto[]> {
     return await this.sessaoService.findAllSessions();
+  }
+
+  @Get('/:pautaId')
+  async findSessionByAgenda(@Param('pautaId') agendaId: number): Promise<ListSessionDto[]> {
+    return await this.sessaoService.findSessionByAgenda(agendaId);
   }
 
   // @Patch()

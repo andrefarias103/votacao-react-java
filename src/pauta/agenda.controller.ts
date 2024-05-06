@@ -28,5 +28,9 @@ export class AgendaController {
     return await this.agendaService.findAgenda(agendaId);
   }
 
+  // @Get('/:categoriaId/:pautaId')
+  // async findAgendasStartedByCategory(@Param('categoriaId') categoryId: number, @Param('pautaId') agendaId: number) {
+  //   return await this.agendaService.findAgendasStartedByCategory(categoryId, agendaId);
+  // }
 
 }

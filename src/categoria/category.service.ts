@@ -22,6 +22,7 @@ export class CategoryService {
       throw new NotFoundException('Nenhuma categoria foi encontrada')
     };    
     return categories.map((categorie) => ({
+      id: categorie.id,
       nome: categorie.nome,
       descricao: categorie.descricao,
     }));

@@ -5,6 +5,9 @@ import { ListAgendaDto } from '../../pauta/dto/select-agenda.dto';
 @Exclude()
 export class ListCategoryDto {
   @Expose()
+  id: number
+  
+  @Expose()
   nome: string;
 
   @Expose()

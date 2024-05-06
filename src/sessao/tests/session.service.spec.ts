@@ -186,4 +186,31 @@ describe('SessionService', () => {
         })
     })
 
+    describe('find session by agenda', () => {
+        it('should find session by agenda', async () => {
+            const agendaId: number = 1;
+            const mockSessionDto: ListSessionDto[] = [
+            {
+                dataHoraInicio: '2024-04-15 10:00:00',
+                dataHoraFim: '2024-04-15 10:30:00',
+                status: 'Iniciada',
+            },
+            {
+                dataHoraInicio: '2024-04-15 11:00:00',
+                dataHoraFim: '2024-04-15 11:30:00',
+                status: 'Fechada',
+            }];
+            jest.spyOn(service, 'findSessionByAgenda').mockResolvedValue(mockSessionDto);
+
+            const result: ListSessionDto[] = await service.findSessionByAgenda(agendaId);
+            expect(result).toHaveLength(2);
+            expect(result[0].dataHoraInicio).toBe('2024-04-15 10:00:00');        
+            expect(result[0].dataHoraFim).toBe('2024-04-15 10:30:00');        
+            expect(result[0].status).toBe('Iniciada');
+            expect(result[1].dataHoraInicio).toBe('2024-04-15 11:00:00');        
+            expect(result[1].dataHoraFim).toBe('2024-04-15 11:30:00');        
+            expect(result[1].status).toBe('Fechada');
+        })
+    })    
+
 })
