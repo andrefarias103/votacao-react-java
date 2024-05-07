@@ -41,11 +41,13 @@ describe('CategoryController', () => {
     it('should return all categories', async () => {
       const mockCategoriesDto: ListCategoryDto[] = [
         {
+          id: 1,
           nome: 'Assembleia Sindical',
           descricao:
             'Categoria que define pautas relacionadas a Assembleia Sindical',
         },
         {
+          id: 2,
           nome: 'Assembleia Condominal',
           descricao: 'Categoria que define pautas relacionadas a Condomínio',
         },

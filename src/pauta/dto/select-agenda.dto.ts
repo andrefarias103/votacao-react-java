@@ -1,4 +1,7 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { IsOptional, ValidateNested } from 'class-validator';
+import { ListCategoryDto } from '../../categoria/dto/select-categoria.dto';
+import { ListSessionDto } from '../../sessao/dto/select-session.dto';
 
 @Exclude()
 export class ListAgendaDto {
@@ -9,5 +12,16 @@ export class ListAgendaDto {
     descricao: string;
 
     @Expose()
-    categoriaId: number;
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => ListCategoryDto)
+    categoria?: ListCategoryDto    
+
+    @Expose()
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => ListSessionDto)
+    Sessao?: ListSessionDto        
+
+
 }

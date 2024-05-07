@@ -1,6 +1,5 @@
-import { Exclude, Expose, Type } from 'class-transformer';
-import { IsOptional, ValidateNested } from 'class-validator';
-import { ListAgendaDto } from '../../pauta/dto/select-agenda.dto';
+import { Exclude, Expose } from 'class-transformer';
+
 
 @Exclude()
 export class ListSessionDto {
@@ -13,10 +12,10 @@ export class ListSessionDto {
     @Expose()
     status: string;
 
-    @Expose()
-    @IsOptional()
-    @ValidateNested()
-    @Type(() => ListAgendaDto)
-    pauta?: ListAgendaDto[]
+    // @Expose()
+    // @IsOptional()
+    // @ValidateNested()
+    // @Type(() => ListAgendaDto)
+    // pauta?: ListAgendaDto[]
 
 }

@@ -43,13 +43,11 @@ describe('AgendaController', () => {
       const mockAgendaDto: ListAgendaDto[] = [
         {
           titulo: 'Votação do reajuste do vale-refeição',
-          descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários', 
-          categoriaId: 1,               
+          descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',                          
         },
         {        
           titulo: 'Votação Day Off',
-          descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',      
-          categoriaId: 1,
+          descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',  
        }
       ];
       jest.spyOn(controller, 'findAllAgendas').mockResolvedValue(mockAgendaDto);
@@ -64,13 +62,11 @@ describe('AgendaController', () => {
       const mockAgendaDto: ListAgendaDto[] = [
         {
           titulo: 'Votação do reajuste do vale-refeição',
-          descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários', 
-          categoriaId: 1,               
+          descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',       
         },
         {        
           titulo: 'Votação Day Off',
-          descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',      
-          categoriaId: 1,
+          descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',  
        }
       ];
 

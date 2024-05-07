@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
 import { TRepository } from '../repository/repository';
 import { UserPerfilEnum } from '../usuario/enums/user-perfil.enum';
 import { CreateAgendaDto } from './dto/create-agenda.dto';
@@ -45,22 +46,25 @@ export class AgendaService {
 
   ////
   public async findAllAgendas(): Promise<ListAgendaDto[]> {
-    const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll();
+    //const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll({include: { categoria: true}});
+    const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll({include: { categoria: true, Sessao: true}});
     if (agendas === null) {
       throw new NotFoundException('Nenhuma agenda foi encontrada')
     };          
-    return agendas.map((agenda) => ({
-      titulo: agenda.titulo,
-      descricao: agenda.descricao,
-      categoriaId: agenda.categoriaId,
-    }));
+    console.log('Lista Pautas: ', agendas);
+    // return agendas.map((agenda) => ({
+    //   titulo: agenda.titulo,
+    //   descricao: agenda.descricao,
+    //   categoriaId: agenda.categoriaId,
+    // }));
+    return plainToInstance( ListAgendaDto, agendas);    
 
   }
 
   ////
   public async findAgendasByCategory(categoryId: number): Promise<ListAgendaDto[]> {
 
-     const category = await this.repositoryCategory.findById({ id: categoryId});      
+     const category = await this.repositoryCategory.findById({ id: categoryId });      
       if (category === null) {
           throw new NotFoundException('Categoria não foi encontrada')
       };

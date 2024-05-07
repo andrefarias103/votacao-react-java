@@ -15,9 +15,9 @@ export class TRepository {
         return model;
       }    
 
-      public async findAll<T>(): Promise<T[]> 
+      public async findAll<T>(props?:any): Promise<T[]> 
       {
-        return  await prisma[this.modelName].findMany();
+        return  await prisma[this.modelName].findMany(props);
       }
 
       public async findById<T>(dataModel:T) {

@@ -42,7 +42,8 @@ model Pauta {
         descricao   String
         categoria   Categoria? @relation("categoria", fields: [categoriaId], references: [id], onDelete: Cascade)
         categoriaId Int
-        Sessao      Sessao[]
+        Sessao      Sessao     @relation(fields: [sessaoId], references: [id])
+        sessaoId    Int        @default(1)
         votacao     Votacao[]  @relation("pauta")
         usuario     Usuario    @relation(fields: [usuarioId], references: [id])
         usuarioId   Int
@@ -63,8 +64,7 @@ model Categoria {
 
 model Sessao {
         id             Int               @id @default(autoincrement())
-        Pauta          Pauta?            @relation(fields: [pautaId], references: [id])
-        pautaId        Int?
+        Pauta          Pauta[]
         dataHoraInicio String
         dataHoraFim    String
         status         StatusSessaoEnum? @default(STATUS_AGUARDANDO)

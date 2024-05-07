@@ -48,13 +48,11 @@ describe('AgendaService', () => {
       const mockAgendaDto: ListAgendaDto[] = [
         {
           titulo: 'Votação do reajuste do vale-refeição',
-          descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários', 
-          categoriaId: 1,               
+          descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',
         },
         {        
           titulo: 'Votação Day Off',
-          descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',      
-          categoriaId: 1,
+          descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',   
        }        
       ];
       jest.spyOn(service, 'findAllAgendas').mockResolvedValue(mockAgendaDto);
@@ -63,10 +61,8 @@ describe('AgendaService', () => {
       expect(result).toHaveLength(2);
       expect(result[0].titulo).toBe('Votação do reajuste do vale-refeição');
       expect(result[0].descricao).toBe('Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários');
-      expect(result[0].categoriaId).toBe(1);
       expect(result[1].titulo).toBe('Votação Day Off');
       expect(result[1].descricao).toBe('Será votada a obrigatoriedade da folga no dia do aniversário do colaborador');
-      expect(result[1].categoriaId).toBe(1);
     })
   })
 
@@ -76,13 +72,11 @@ describe('AgendaService', () => {
       const mockAgendaDto: ListAgendaDto[] = [
         {
           titulo: 'Votação do reajuste do vale-refeição',
-          descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários', 
-          categoriaId: 1,               
+          descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',     
         },
         {        
           titulo: 'Votação Day Off',
-          descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',      
-          categoriaId: 1,
+          descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',     
        }
       ];
 
@@ -91,10 +85,8 @@ describe('AgendaService', () => {
       expect(result).toHaveLength(2);
       expect(result[0].titulo).toBe('Votação do reajuste do vale-refeição');
       expect(result[0].descricao).toBe('Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários');
-      expect(result[0].categoriaId).toBe(1);
       expect(result[1].titulo).toBe('Votação Day Off');
-      expect(result[1].descricao).toBe('Será votada a obrigatoriedade da folga no dia do aniversário do colaborador');
-      expect(result[1].categoriaId).toBe(1);      
+      expect(result[1].descricao).toBe('Será votada a obrigatoriedade da folga no dia do aniversário do colaborador');  
     })
   })
 
@@ -103,8 +95,7 @@ describe('AgendaService', () => {
       const agendaId: number = 1;
       const mockAgendaDto: ListAgendaDto = {          
                                               titulo: 'Votação do reajuste do vale-refeição',
-                                              descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários', 
-                                              categoriaId: 1,    
+                                              descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',   
                                             };
        jest.spyOn(service,'findAgenda').mockResolvedValue(mockAgendaDto);
        const result: ListAgendaDto = await service.findAgenda(agendaId);
@@ -117,7 +108,6 @@ describe('AgendaService', () => {
       const mockAgendaDto: ListAgendaDto = {          
         titulo: 'Votação do reajuste do vale-refeição',
         descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários', 
-        categoriaId: 1,    
       };
       await expect(service.findAgenda(agendaId)).rejects.toThrow(NotFoundException);     
     })
