@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Pauta" ADD COLUMN     "votacaoId" INTEGER NOT NULL DEFAULT 1;

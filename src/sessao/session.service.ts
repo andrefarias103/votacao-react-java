@@ -19,7 +19,7 @@ export class SessionService {
   ////
   public async createSession(agendaId: number, sessionData: CreateSessionDto): Promise<CreateSessionDto> {
     
-      const agenda = await this.repositoryAgenda.findById({ id: agendaId});
+      const agenda = await this.repositoryAgenda.findById({ where: { id: agendaId}});
       if (agenda === null) { 
         throw new NotFoundException(`Pauta [${agendaId}]: Não foi encontrada'`)
       };
@@ -93,7 +93,7 @@ export class SessionService {
   ////
   public async findSessionByAgenda(agendaId: number): Promise<ListSessionDto[]> {
 
-    const sessions = this.repository.findById({ agendaId: agendaId});
+    const sessions = this.repository.findById({ where: { agendaId: agendaId}});
     if (sessions === null) {
       throw new NotFoundException('Sessões não foram encontradas')
   };      

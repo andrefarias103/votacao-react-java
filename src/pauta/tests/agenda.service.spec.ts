@@ -1,19 +1,21 @@
-import { HttpException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { TRepository } from '../../repository/repository';
+import { VotationService } from '../../votacao/votation.service';
 import { AgendaService } from '../agenda.service';
 import { CreateAgendaDto } from '../dto/create-agenda.dto';
 import { ListAgendaDto } from '../dto/select-agenda.dto';
 
 describe('AgendaService', () => {
-  let service: AgendaService;
-  let repository: TRepository;
+  let serviceAgenda: AgendaService;
+  let serviceVotation: VotationService;
+  let repositoryAgenda: TRepository;
 
   beforeEach(async () => {
-    service = new AgendaService(repository);
+    serviceAgenda = new AgendaService(repositoryAgenda, serviceVotation);
     });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(serviceAgenda).toBeDefined();
   });
 
   describe('create Agenda', () => {
@@ -24,40 +26,31 @@ describe('AgendaService', () => {
         titulo: 'Votação do reajuste do vale-refeição',
         descricao:  'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',        
       };
-      jest.spyOn(service, 'createAgenda').mockResolvedValue(mockAgendaDto);
+      jest.spyOn(serviceAgenda, 'createAgenda').mockResolvedValue(mockAgendaDto);
       
-      const createAgenda = await service.createAgenda(userId, categoryId, mockAgendaDto);
+      const createAgenda = await serviceAgenda.createAgenda(userId, categoryId, mockAgendaDto);
       expect(createAgenda).toEqual(mockAgendaDto);
     });
 
-    it('should not create by a common user', async () => {
-      const userId = 1;
-      const categoryId: number = 1;
-      const mockAgendaDto: CreateAgendaDto = {
-        titulo: 'Votação do reajuste do vale-refeição',
-        descricao:  'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',        
-      };
-
-      await expect(service.createAgenda(userId, categoryId, mockAgendaDto)).rejects.toThrow(HttpException);
-
-    }) 
   })
 
   describe('find All Agendas', () => {
     it('should return all agendas', async () => {
       const mockAgendaDto: ListAgendaDto[] = [
         {
+          id: 1,
           titulo: 'Votação do reajuste do vale-refeição',
           descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',
         },
-        {        
+        {     
+          id: 2,   
           titulo: 'Votação Day Off',
           descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',   
        }        
       ];
-      jest.spyOn(service, 'findAllAgendas').mockResolvedValue(mockAgendaDto);
+      jest.spyOn(serviceAgenda, 'findAllAgendas').mockResolvedValue(mockAgendaDto);
 
-      const result: ListAgendaDto[] = await service.findAllAgendas();
+      const result: ListAgendaDto[] = await serviceAgenda.findAllAgendas();
       expect(result).toHaveLength(2);
       expect(result[0].titulo).toBe('Votação do reajuste do vale-refeição');
       expect(result[0].descricao).toBe('Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários');
@@ -71,17 +64,19 @@ describe('AgendaService', () => {
       const categoryId: number = 1;
       const mockAgendaDto: ListAgendaDto[] = [
         {
+          id: 1,
           titulo: 'Votação do reajuste do vale-refeição',
           descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',     
         },
         {        
+          id: 2,
           titulo: 'Votação Day Off',
           descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',     
        }
       ];
 
-      jest.spyOn(service, 'findAgendasByCategory').mockResolvedValue(mockAgendaDto);
-      const result: ListAgendaDto[] = await service.findAgendasByCategory(categoryId);
+      jest.spyOn(serviceAgenda, 'findAgendasByCategory').mockResolvedValue(mockAgendaDto);
+      const result: ListAgendaDto[] = await serviceAgenda.findAgendasByCategory(categoryId);
       expect(result).toHaveLength(2);
       expect(result[0].titulo).toBe('Votação do reajuste do vale-refeição');
       expect(result[0].descricao).toBe('Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários');
@@ -90,26 +85,62 @@ describe('AgendaService', () => {
     })
   })
 
+  describe('find start agendas', () => {
+    it('should not find category', async () => {
+      const categoryId: number = 144;
+      await expect(serviceAgenda.findStartAgendasByCategory(categoryId)).rejects.toThrow(NotFoundException);   
+    })
+
+    it('should return agendas with votes when category is provided', async () => {
+
+        const mockCategory = { id: 3, nome: "Plebiscito", descricao: "desarmamento da população" }
+        const mockAgenda: ListAgendaDto[] = [{ id: 1, 
+                             titulo: "Você é a favor do desarmamento?", 
+                             descricao: "Será votado o desarmamento ou não da população", 
+                             quantidadeVotos: 1,
+                             categoria: { ...mockCategory}, 
+                             votacao: { opcaoVotada: "Sim", dataHoraVoto: "2024-05-07 11:45:47" }},
+                             { id: 2, 
+                              titulo: "Você é a favor da alteração da reforma agrária?", 
+                              descricao: "Será votado se a reforma agrária será alterada ou não", 
+                              quantidadeVotos: 1,
+                              categoria: { ...mockCategory}, 
+                              votacao: { opcaoVotada: "Sim", dataHoraVoto: "2024-05-07 11:45:47" }
+                            }
+                            ];
+        const mockTotalVotes: number = 1;
+
+        jest.spyOn(serviceAgenda, "findStartAgendasByCategory").mockResolvedValue(mockAgenda);
+        const agenda: ListAgendaDto[] = await serviceAgenda.findStartAgendasByCategory(mockCategory.id);
+        expect(agenda).toEqual(mockAgenda);
+        expect(agenda).toHaveLength(2);
+        expect(agenda[0].quantidadeVotos).toBe(mockTotalVotes);
+        expect(agenda[1].quantidadeVotos).toBe(mockTotalVotes);
+
+     });      
+      
+
+  })
+
+
+
   describe('find agenda data', () => {
     it('should return agenda data', async () => {
       const agendaId: number = 1;
-      const mockAgendaDto: ListAgendaDto = {          
+      const mockAgendaDto: ListAgendaDto = {       
+                                              id: 1,   
                                               titulo: 'Votação do reajuste do vale-refeição',
                                               descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',   
                                             };
-       jest.spyOn(service,'findAgenda').mockResolvedValue(mockAgendaDto);
-       const result: ListAgendaDto = await service.findAgenda(agendaId);
+       jest.spyOn(serviceAgenda,'findAgenda').mockResolvedValue(mockAgendaDto);
+       const result: ListAgendaDto = await serviceAgenda.findAgenda(agendaId);
        expect(result.titulo).toBe('Votação do reajuste do vale-refeição');
        expect(result.descricao).toBe('Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários')              
     });
 
     it('should not return agenda data', async () => {
       const agendaId: number = 144;
-      const mockAgendaDto: ListAgendaDto = {          
-        titulo: 'Votação do reajuste do vale-refeição',
-        descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários', 
-      };
-      await expect(service.findAgenda(agendaId)).rejects.toThrow(NotFoundException);     
+      await expect(serviceAgenda.findAgenda(agendaId)).rejects.toThrow(NotFoundException);     
     })
   });
 

@@ -8,8 +8,8 @@ export class VotationController {
   constructor(private readonly votationService: VotationService) {}
 
   @Post()
-  public async createVotacao(@Query('usuarioId') userId: number, @Query('pautaId') agendaId: number, @Query('sessaoId') sessionId: number, @Body() dataVotation: CreateVotationDto) {
-    return await this.votationService.createVotacao(userId, agendaId, sessionId, dataVotation);
+  public async createVotacao(@Query('usuarioId') userId: number, @Query('pautaId') agendaId: number, @Body() dataVotation: CreateVotationDto) {
+    return await this.votationService.createVotacao(userId, agendaId, dataVotation);
   }
 
   @Get()

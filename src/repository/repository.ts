@@ -20,10 +20,8 @@ export class TRepository {
         return  await prisma[this.modelName].findMany(props);
       }
 
-      public async findById<T>(dataModel:T) {
-        return await prisma[this.modelName].findUnique({ 
-            where: dataModel
-          });
+      public async findById<T>(props?:any) {     
+        return await prisma[this.modelName].findUnique(props);        
       }
 
       public async findByWhere<T>(dataModel:T) {

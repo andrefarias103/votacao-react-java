@@ -18,13 +18,12 @@ describe('VotationService', () => {
     it('should create Vote', async () => {
       const usuarioId: number = 1;
       const pautaId: number = 1;
-      const sessaoId: number = 1;
       const mockVotacaoDto: CreateVotationDto = {
         opcaoVotada: 'Nao',   
       }
 
       jest.spyOn(service, 'createVotacao').mockResolvedValue(mockVotacaoDto);
-      const result = await service.createVotacao(usuarioId, pautaId, sessaoId, mockVotacaoDto);
+      const result = await service.createVotacao(usuarioId, pautaId, mockVotacaoDto);
       expect(result).toEqual(mockVotacaoDto);
     })
 

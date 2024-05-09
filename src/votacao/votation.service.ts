@@ -16,23 +16,23 @@ export class VotationService {
       this.repositoryUser = new TRepository('usuario');
       this.repositoryAgenda = new TRepository('pauta');      
       this.repository = new TRepository('Votacao');    
-      this.repositorySession = new TRepository('Session');
+      this.repositorySession = new TRepository('Sessao');
     }
 
-  async createVotacao(userId: number, agendaId: number, sessionId: number, dataVotation: CreateVotationDto) {
-
-      const user = await this.repositoryUser.findById({ id: userId});
+  async createVotacao(userId: number, agendaId: number, dataVotation: CreateVotationDto) {
+      
+      const user = await this.repositoryUser.findById({ where: { id: userId}});
       if (user === null) { 
         throw new NotFoundException('Usuário não foi encontrado')
       };
   
-      const agenda = await this.repositoryAgenda.findById({  id: agendaId });
+      const agenda = await this.repositoryAgenda.findById({ where: {  id: agendaId }});
       if (agenda === null) { 
         throw new NotFoundException('Pauta não foi encontrada')
       };
 
-      const session = await this.repositorySession.findById({ id: sessionId});
-      if (session === null) { 
+      const session = await this.repositorySession.findById({ where: { id: agenda.sessaoId}});
+      if ((session === null) || (session === undefined)) { 
         throw new NotFoundException('Sessão não foi encontrada')
       };
 
@@ -40,7 +40,7 @@ export class VotationService {
         throw new HttpException('Sessão não está disponível para votação', HttpStatus.FORBIDDEN);
       }
 
-      const userVoted = await this.repository.findById({ id: user.id, pautaId: agenda.id });
+      const userVoted = await this.repository.findById({ where: { id: user.id, pautaId: agenda.id }});
       if (userVoted !== null) { 
         throw new Error(`Usuário [${user.nome}]: já votou!!!'`)
       };
@@ -58,20 +58,22 @@ export class VotationService {
 
 
   async getTotalVotes(agendaId: number): Promise<number> {
-
-    const agenda = await this.repositoryAgenda.findById({ id: agendaId});
+    const agenda = await this.repositoryAgenda.findById({ where:  { id: agendaId} });
     if (agenda === null) { 
       throw new NotFoundException(`Pauta [${agendaId}]: não encontrada'`)
     };
 
+    console.log('achou a agenda');
+
+
     const totalVotes = await this.repository.recordCountById({ pautaId: agendaId });
     console.log(`Total de Votos: ${totalVotes}`);
 
-    const totalVotesYes = await this.repository.recordCountById({ pautaId: agendaId, opcaoVotada: 'Sim' });
-    console.log(`Total de Votos (Sim): ${totalVotesYes}`);
+    // const totalVotesYes = await this.repository.recordCountById({ pautaId: agendaId, opcaoVotada: 'Sim' });
+    // console.log(`Total de Votos (Sim): ${totalVotesYes}`);
 
-    const totalVotesNo = await this.repository.recordCountById({ pautaId: agendaId, opcaoVotada: 'Não' });
-    console.log(`Total de Votos (Não): ${totalVotesNo}`);
+    // const totalVotesNo = await this.repository.recordCountById({ pautaId: agendaId, opcaoVotada: 'Não' });
+    // console.log(`Total de Votos (Não): ${totalVotesNo}`);
     return totalVotes;
   }
 

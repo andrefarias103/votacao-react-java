@@ -26,7 +26,7 @@ export class UserService {
   async createUser(userId: number, dataUser: CreateUserDTO): Promise<CreateUserDTO> {
     try {
 
-      const memberUser = await this.repository.findById({ id: userId});
+      const memberUser = await this.repository.findById({ where: { id: userId}});
       if (memberUser === null) {
         throw new NotFoundException('Usuário administrador foi encontrado');
       }  

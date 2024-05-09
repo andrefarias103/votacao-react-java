@@ -1,7 +1,9 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { StatusSessaoEnum } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { TRepository } from '../repository/repository';
 import { UserPerfilEnum } from '../usuario/enums/user-perfil.enum';
+import { VotationService } from '../votacao/votation.service';
 import { CreateAgendaDto } from './dto/create-agenda.dto';
 import { ListAgendaDto } from './dto/select-agenda.dto';
 
@@ -10,21 +12,24 @@ export class AgendaService {
   
   private readonly repositoryCategory: TRepository;
   private readonly repositoryUser: TRepository;
+  private readonly repositoryVotation: TRepository;
 
-  constructor(private readonly repositoryAgenda: TRepository) 
+
+  constructor(private readonly repositoryAgenda: TRepository, private readonly serviceVotation: VotationService) 
   {
     this.repositoryAgenda = new TRepository('pauta');
     this.repositoryCategory = new TRepository('categoria');
     this.repositoryUser = new TRepository('usuario');
+    this.repositoryVotation = new TRepository('votacao');
   }
 
   ////
   public async createAgenda(userId: number, categoryId: number, dataAgenda: CreateAgendaDto): Promise<CreateAgendaDto> 
   {
-    const category = await this.repositoryCategory.findById({ id: categoryId});
+    const category = await this.repositoryCategory.findById({ where: { id: categoryId}});
     if (category === null) { throw new NotFoundException('Categoria não foi encontrada')};
 
-    const user = await this.repositoryUser.findById({ id: userId });
+    const user = await this.repositoryUser.findById({ where: { id: userId }});
     if (user === null) {
       throw new NotFoundException(`Usuário [${userId}]: Não foi encontrado'`);      
     } 
@@ -45,42 +50,80 @@ export class AgendaService {
   }
 
   ////
-  public async findAllAgendas(): Promise<ListAgendaDto[]> {
-    //const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll({include: { categoria: true}});
-    const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll({include: { categoria: true, Sessao: true}});
+  public async findAllAgendas(): Promise<ListAgendaDto[]> {    
+
+    const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll({include: { categoria: true, Sessao: true, votacao: true}});
     if (agendas === null) {
       throw new NotFoundException('Nenhuma agenda foi encontrada')
     };          
-    console.log('Lista Pautas: ', agendas);
-    // return agendas.map((agenda) => ({
-    //   titulo: agenda.titulo,
-    //   descricao: agenda.descricao,
-    //   categoriaId: agenda.categoriaId,
-    // }));
-    return plainToInstance( ListAgendaDto, agendas);    
+    const agendasComVotos = await Promise.all(agendas.map(async agenda => {
+      const quantidadeVotos = await this.serviceVotation.getTotalVotes(agenda.id);
+      return { ...agenda, quantidadeVotos };
+    }));
 
+    return plainToInstance( ListAgendaDto, agendasComVotos);    
   }
 
   ////
   public async findAgendasByCategory(categoryId: number): Promise<ListAgendaDto[]> {
-
-     const category = await this.repositoryCategory.findById({ id: categoryId });      
+      
+    const category = await this.repositoryCategory.findById({ where: { id: categoryId }});      
       if (category === null) {
           throw new NotFoundException('Categoria não foi encontrada')
       };
-  
-      const agendas = this.repositoryAgenda.findById({ categoriaId: categoryId});
+      
+      const agendas: ListAgendaDto[]  = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { categoriaId: categoryId}});
       if (agendas === null) {
-        throw new NotFoundException('Agenda não foi encontrada')
-    };      
-   
-     return agendas;      
+        throw new NotFoundException('Agenda não foi encontrada');
+       };      
+
+      const itemAgendas = agendas.map((item) => { 
+        return this.serviceVotation.getTotalVotes(item.id)
+      });
+
+      const agendasComVotos = await Promise.all(agendas.map(async agenda => {
+        const quantidadeVotos = await this.serviceVotation.getTotalVotes(agenda.id);
+        return { ...agenda, quantidadeVotos };
+      }));
+
+      return plainToInstance( ListAgendaDto, agendasComVotos);     
+
+  }
+
+  ////
+  public async findStartAgendasByCategory(categoryId?: number): Promise<ListAgendaDto[]> {
+      
+    let agendas: ListAgendaDto[];
+
+    if (categoryId) {
+    
+      const category = await this.repositoryCategory.findById({ where: { id: categoryId }});      
+      if (category === null) {
+          throw new NotFoundException('Categoria não foi encontrada')
+      };
+      agendas = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { categoriaId: categoryId, Sessao: {status: StatusSessaoEnum.STATUS_INICIADA}}});   
+    } 
+    else {      
+      agendas = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { Sessao: {status: StatusSessaoEnum.STATUS_INICIADA}}});   
+    }
+      
+    const itemAgendas = agendas.map((item) => { 
+      return this.serviceVotation.getTotalVotes(item.id)
+    });
+
+    const agendasComVotos = await Promise.all(agendas.map(async agenda => {
+      const quantidadeVotos = await this.serviceVotation.getTotalVotes(agenda.id);
+      return { ...agenda, quantidadeVotos };
+    }));
+
+    return plainToInstance( ListAgendaDto, agendasComVotos);     
+
   }
 
   ////
   public async findAgenda(agendaId: number): Promise<ListAgendaDto>
   {
-    const agenda = await this.repositoryAgenda.findById({ id: agendaId});
+    const agenda = await this.repositoryAgenda.findById({ where: { id: agendaId } });
     if (agenda === null) {
       throw new NotFoundException('Agenda não foi encontrada')
     };

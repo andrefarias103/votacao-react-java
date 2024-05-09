@@ -25,13 +25,12 @@ describe('VotationController', () => {
     it('should create vote', async () => {
       const usuarioId: number = 1;
       const pautaId: number = 1;
-      const sessaoId: number = 1;
       const mockVotacaoDto: CreateVotationDto = {
         opcaoVotada: 'Sim',        
       }; 
       jest.spyOn(controller,'createVotacao').mockResolvedValue(mockVotacaoDto);
 
-      const result = await controller.createVotacao(usuarioId, pautaId, sessaoId, mockVotacaoDto);
+      const result = await controller.createVotacao(usuarioId, pautaId, mockVotacaoDto);
       expect(result).toEqual(mockVotacaoDto); 
     });
   })

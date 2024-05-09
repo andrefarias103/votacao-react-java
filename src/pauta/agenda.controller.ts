@@ -3,7 +3,7 @@ import { AgendaService } from './agenda.service';
 import { CreateAgendaDto } from './dto/create-agenda.dto';
 import { ListAgendaDto } from './dto/select-agenda.dto';
 
-@Controller('pauta')
+@Controller('pautas')
 export class AgendaController {
   constructor(private readonly agendaService: AgendaService) {}
 
@@ -13,8 +13,19 @@ export class AgendaController {
     return agenda;
   }
 
+  @Get('/liberadas/:categoriaId')
+  async findStartAgendasByCategory(@Param('categoriaId') categoryId: number) {
+    return await this.agendaService.findStartAgendasByCategory(categoryId);
+  }    
+
+  @Get('/liberadas')
+  async findStartAgendas() {
+    return await this.agendaService.findStartAgendasByCategory();
+  }
+  
   @Get()
   async findAllAgendas(): Promise<ListAgendaDto[]> {
+    console.log('findAllAgendas');
     return await this.agendaService.findAllAgendas();
   }
 
@@ -27,10 +38,5 @@ export class AgendaController {
   async findAgenda(@Param('pautaId') agendaId: number) {
     return await this.agendaService.findAgenda(agendaId);
   }
-
-  // @Get('/:categoriaId/:pautaId')
-  // async findAgendasStartedByCategory(@Param('categoriaId') categoryId: number, @Param('pautaId') agendaId: number) {
-  //   return await this.agendaService.findAgendasStartedByCategory(categoryId, agendaId);
-  // }
 
 }

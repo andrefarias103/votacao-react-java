@@ -1,10 +1,14 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-import { IsOptional, ValidateNested } from 'class-validator';
+import { IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { ListCategoryDto } from '../../categoria/dto/select-categoria.dto';
 import { ListSessionDto } from '../../sessao/dto/select-session.dto';
+import { ListVotacionDto } from '../../votacao/dto/select-votation.dto';
 
 @Exclude()
 export class ListAgendaDto {
+    @Expose()
+    id: number
+        
     @Expose()
     titulo: string;
 
@@ -23,5 +27,15 @@ export class ListAgendaDto {
     @Type(() => ListSessionDto)
     Sessao?: ListSessionDto        
 
+    @Expose()
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => ListVotacionDto)
+    votacao?: ListVotacionDto    
+    
+    @Expose()
+    @IsOptional()
+    @IsNumber()
+    quantidadeVotos?: number;
 
 }

@@ -8,7 +8,7 @@ export class SessionExpirationTask {
 
     constructor(private readonly sessionService: SessionService) {}    
 
-    @Cron(CronExpression.EVERY_5_SECONDS)
+    @Cron(CronExpression.EVERY_30_SECONDS)
     handleCron() {
       //this.logger.debug('Called when the current second is 5');
       this.sessionService.startAllSessions();

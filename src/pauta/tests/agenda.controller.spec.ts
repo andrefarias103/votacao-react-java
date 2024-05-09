@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TRepository } from '../../repository/repository';
+import { VotationController } from '../../votacao/votation.controller';
+import { VotationService } from '../../votacao/votation.service';
 import { AgendaController } from '../agenda.controller';
 import { AgendaService } from '../agenda.service';
 import { CreateAgendaDto } from '../dto/create-agenda.dto';
@@ -11,8 +13,8 @@ describe('AgendaController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      controllers: [AgendaController],
-      providers: [AgendaService, TRepository],
+      controllers: [AgendaController, VotationController],
+      providers: [AgendaService, VotationService, TRepository],
     }).compile();
 
     controller = module.get<AgendaController>(AgendaController);
@@ -42,10 +44,12 @@ describe('AgendaController', () => {
     it('should return all agends', async () => {
       const mockAgendaDto: ListAgendaDto[] = [
         {
+          id: 1,
           titulo: 'Votação do reajuste do vale-refeição',
           descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',                          
         },
         {        
+          id: 2,
           titulo: 'Votação Day Off',
           descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',  
        }
@@ -61,10 +65,12 @@ describe('AgendaController', () => {
       const categoryId: number = 1;
       const mockAgendaDto: ListAgendaDto[] = [
         {
+          id: 1,
           titulo: 'Votação do reajuste do vale-refeição',
           descricao: 'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',       
         },
-        {        
+        {       
+          id: 2, 
           titulo: 'Votação Day Off',
           descricao: 'Será votada a obrigatoriedade da folga no dia do aniversário do colaborador',  
        }
