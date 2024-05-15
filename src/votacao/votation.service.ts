@@ -63,12 +63,8 @@ export class VotationService {
       throw new NotFoundException(`Pauta [${agendaId}]: não encontrada'`)
     };
 
-    console.log('achou a agenda');
-
-
     const totalVotes = await this.repository.recordCountById({ pautaId: agendaId });
-    console.log(`Total de Votos: ${totalVotes}`);
-
+    
     // const totalVotesYes = await this.repository.recordCountById({ pautaId: agendaId, opcaoVotada: 'Sim' });
     // console.log(`Total de Votos (Sim): ${totalVotesYes}`);
 
@@ -76,9 +72,6 @@ export class VotationService {
     // console.log(`Total de Votos (Não): ${totalVotesNo}`);
     return totalVotes;
   }
-
-
-
 
   findAll() {
     return `This action returns all votacao`;

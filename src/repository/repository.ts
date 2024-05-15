@@ -9,32 +9,45 @@ export class TRepository {
     }
 
     public async create<T>(dataModel:T) {
-        const model = await prisma[this.modelName].create({
-          data: dataModel,
-        });    
-        return model;
-      }    
+      const model = await prisma[this.modelName].create({
+        data: dataModel,
+      });    
+      return model;
+    }    
 
-      public async findAll<T>(props?:any): Promise<T[]> 
-      {
-        return  await prisma[this.modelName].findMany(props);
-      }
+    public async update<T>(props?:any) {
+      return  await prisma[this.modelName].update(props);
+    }
 
-      public async findById<T>(props?:any) {     
-        return await prisma[this.modelName].findUnique(props);        
-      }
+    public async delete<T>(props?:any) {
+      return  await prisma[this.modelName].delete(props);
+    }
 
-      public async findByWhere<T>(dataModel:T) {
-        return await prisma[this.modelName].findMany({ 
-            where: dataModel
-          });
-      }
-    
-      public async recordCountById<T>(dataModel: T): Promise<number> {
-        return await prisma[this.modelName].count({
-                                                   where: dataModel   
-                                                  });
-      }
+    public async findAll<T>(props?:any): Promise<T[]> 
+    {
+      return  await prisma[this.modelName].findMany(props);
+    }
+
+    public async findById<T>(props?:any) {     
+      return await prisma[this.modelName].findUnique(props);        
+    }
+
+    public async findByWhere<T>(dataModel:T) {
+      return await prisma[this.modelName].findMany({ 
+          where: dataModel
+        });
+    }
+  
+    public async recordCountById<T>(dataModel: T): Promise<number> {
+      return await prisma[this.modelName].count({
+                                                  where: dataModel   
+                                                });
+    }
+
+}
+
+
+
 
 
       // public async generateSeed() {
@@ -57,12 +70,3 @@ export class TRepository {
 
       //   console.log('Arquivo de seed gerado com sucesso!');
       //   }
-
-      public async update<T> (dataModel: T, filter: T) {
-        return await prisma[this.modelName].update({ 
-          data: dataModel,        
-          where: filter
-        });        
-      }
-}
-

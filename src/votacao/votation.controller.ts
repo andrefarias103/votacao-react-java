@@ -29,12 +29,12 @@ export class VotationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVotationDto: UpdateVotationDto) {
+  update(@Query('id') id: string, @Body() updateVotationDto: UpdateVotationDto) {
     return this.votationService.update(+id, updateVotationDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Query('id') id: string) {
     return this.votationService.remove(+id);
   }
 

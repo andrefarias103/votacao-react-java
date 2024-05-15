@@ -14,7 +14,7 @@ export class AgendaService {
   private readonly repositoryUser: TRepository;
   private readonly repositoryVotation: TRepository;
 
-
+  ////
   constructor(private readonly repositoryAgenda: TRepository, private readonly serviceVotation: VotationService) 
   {
     this.repositoryAgenda = new TRepository('pauta');
@@ -57,6 +57,10 @@ export class AgendaService {
       throw new NotFoundException('Nenhuma agenda foi encontrada')
     };          
     const agendasComVotos = await Promise.all(agendas.map(async agenda => {
+      if (agenda.Sessao) {
+        agenda.Sessao.dataHoraInicio = new Date(agenda.Sessao.dataHoraInicio).toLocaleString();
+        agenda.Sessao.dataHoraFim = new Date(agenda.Sessao.dataHoraFim).toLocaleString(); 
+      }
       const quantidadeVotos = await this.serviceVotation.getTotalVotes(agenda.id);
       return { ...agenda, quantidadeVotos };
     }));
@@ -96,7 +100,6 @@ export class AgendaService {
     let agendas: ListAgendaDto[];
 
     if (categoryId) {
-    
       const category = await this.repositoryCategory.findById({ where: { id: categoryId }});      
       if (category === null) {
           throw new NotFoundException('Categoria não foi encontrada')
@@ -106,12 +109,16 @@ export class AgendaService {
     else {      
       agendas = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { Sessao: {status: StatusSessaoEnum.STATUS_INICIADA}}});   
     }
-      
+
     const itemAgendas = agendas.map((item) => { 
       return this.serviceVotation.getTotalVotes(item.id)
     });
 
     const agendasComVotos = await Promise.all(agendas.map(async agenda => {
+      if (agenda.Sessao) {
+        agenda.Sessao.dataHoraInicio = new Date(agenda.Sessao.dataHoraInicio).toLocaleString();
+        agenda.Sessao.dataHoraFim = new Date(agenda.Sessao.dataHoraFim).toLocaleString(); 
+      }      
       const quantidadeVotos = await this.serviceVotation.getTotalVotes(agenda.id);
       return { ...agenda, quantidadeVotos };
     }));

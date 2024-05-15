@@ -25,6 +25,7 @@ export class SessionService {
       };
     
       const datetime_final: Date = getDateFinal(sessionData.dataHoraInicio, sessionData.dataHoraFim );
+      
       const datetime_initial = new Date(sessionData.dataHoraInicio);  
       if (datetime_final <= datetime_initial) {
         throw new Error('Data hora final é menor ou igual a data hora inicial');
@@ -55,7 +56,7 @@ export class SessionService {
     }
 
     sessions.map( (session) => { 
-      this.repository.update({ status: StatusSessaoEnum.STATUS_INICIADA}, { id: session.id});        
+      this.repository.update({ where: { id: session.id}, data: {status: StatusSessaoEnum.STATUS_INICIADA}} );        
     });
 
     return true;
@@ -72,7 +73,7 @@ export class SessionService {
                                                         });
     if (sessions !== null) {
       return sessions.map( (session) => { 
-        this.repository.update({ status: StatusSessaoEnum.STATUS_CONCLUIDA}, { id: session.id});
+        this.repository.update( {where: { id: session.id}, data: { status: StatusSessaoEnum.STATUS_CONCLUIDA}} );
       })
     }
   }
@@ -83,11 +84,21 @@ export class SessionService {
     if (sessions === null) {
       throw new NotFoundException('Nenhuma sessão encontrada');
     }
-    return sessions.map((session) => ({
-      dataHoraInicio: session.dataHoraInicio,
-      dataHoraFim: session.dataHoraFim,
-      status: session.status
-    }));
+
+    const listSessions: ListSessionDto[] = sessions.map( (item: ListSessionDto) => {
+      item.dataHoraInicio = new Date(item.dataHoraInicio).toLocaleString();
+      item.dataHoraFim = new Date(item.dataHoraFim).toLocaleString();
+      return {...item, dataHoraInicio: item.dataHoraInicio, dataHoraFim: item.dataHoraFim}
+    })
+
+    return listSessions;
+
+    // return sessions.map((session) => (
+    //   {
+    //   dataHoraInicio: session.dataHoraInicio,
+    //   dataHoraFim: session.dataHoraFim,
+    //   status: session.status
+    // }));
   }
 
   ////
@@ -96,8 +107,7 @@ export class SessionService {
     const sessions = this.repository.findById({ where: { agendaId: agendaId}});
     if (sessions === null) {
       throw new NotFoundException('Sessões não foram encontradas')
-  };      
- 
+    };       
    return sessions;   
   }
 
