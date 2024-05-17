@@ -12,9 +12,12 @@ export class CategoryService {
 
   public async createCategory(dadosCategoria: CreateCategoryDto) {
     const category: CreateCategoryDto = await this.repository.create( 
-      { nome: dadosCategoria.nome, descricao: dadosCategoria.descricao },
+      { data: { nome: dadosCategoria.nome, descricao: dadosCategoria.descricao }},
     );    
-    return category;
+    return {
+      categoria: category,
+      messsage: 'Categoria criada com sucesso',
+    };
   }
 
   public async findAllCategories(): Promise<ListCategoryDto[]> {    

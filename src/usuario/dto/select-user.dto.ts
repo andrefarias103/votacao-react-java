@@ -6,4 +6,10 @@ export class ListUserDTO {
   login: string;
   @Expose()
   nome: string;
+  @Expose()
+  email: string;
+  @Expose()
+  cpf: string;  
+  @Expose()
+  tipo: string;    
 }

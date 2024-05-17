@@ -46,12 +46,12 @@ export class VotationService {
       };
 
       const datatime_now = new Date(Date.now());      
-      const vote: CreateVotationDto = await this.repository.create({
+      const vote: CreateVotationDto = await this.repository.create({data: {
           opcaoVotada: dataVotation.opcaoVotada,
           dataHoraVoto: getDateFormat(datatime_now),
           usuarioId: userId,
           pautaId: agendaId,
-      });
+      }});
 
       return vote;
   }

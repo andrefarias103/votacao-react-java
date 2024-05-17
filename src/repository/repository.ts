@@ -8,10 +8,8 @@ export class TRepository {
       this.modelName = modelName;
     }
 
-    public async create<T>(dataModel:T) {
-      const model = await prisma[this.modelName].create({
-        data: dataModel,
-      });    
+    public async create<T>(props?:any) {
+      const model = await prisma[this.modelName].create(props);    
       return model;
     }    
 

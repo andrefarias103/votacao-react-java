@@ -32,12 +32,12 @@ export class SessionService {
       }
 
       const createSession: CreateSessionDto = await this.repository.create(
-        { 
+        {data: { 
                 dataHoraInicio: sessionData.dataHoraInicio, 
                 dataHoraFim: getDateFormat(datetime_final),
                 Pauta: { connect: { id: agenda?.id }}, 
                 status: StatusSessaoEnum.STATUS_AGUARDANDO,
-      });    
+      }});    
       return createSession;
       
   }

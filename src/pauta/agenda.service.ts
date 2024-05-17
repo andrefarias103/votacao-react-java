@@ -38,13 +38,13 @@ export class AgendaService {
       throw new HttpException(`Usuário[${userId}]: Não tem perfil de Administrador`, HttpStatus.FORBIDDEN);
     }    
 
-    const agenda: CreateAgendaDto = await this.repositoryAgenda.create(
+    const agenda: CreateAgendaDto = await this.repositoryAgenda.create( {data:
       {          
         titulo: dataAgenda.titulo, 
         descricao: dataAgenda.descricao,        
         categoria: { connect: { id: categoryId}},   
         usuario:   { connect: { id: userId }},
-      });
+      }});
 
     return agenda;
   }
