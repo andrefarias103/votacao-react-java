@@ -33,7 +33,7 @@ describe('UserController', () => {
         endereco: 'Av. São Luis 44',
         email: 'jcl@hotmail.com',
         cpf: '801.711.024.12',
-        tipo: UserPerfilEnum.PERFIL_USUARIO_ADM,
+        tipo: UserPerfilEnum.PERFIL_ADMIN,
       };
       jest.spyOn(userController, 'createUser').mockResolvedValue(mockUserDto);
 

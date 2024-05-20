@@ -1,10 +1,15 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { TRepository } from '../repository/repository';
 import { CreateUserMainAdminDTO } from './dto/create-user-main-admin.dto';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { ListUserDTO } from './dto/select-user.dto';
 import { UserPerfilEnum } from './enums/user-perfil.enum';
+
+export interface ENUM_PROFILE {
+  key: string; 
+  nome: string;  
+ }
 
 @Injectable()
 export class UserService {
@@ -13,17 +18,15 @@ export class UserService {
   }
 
 
-  async createUser(userId: number, dataUser: CreateUserDTO): Promise<CreateUserDTO> {
+  async createUser(userId: number, dataUser: CreateUserDTO): Promise<CreateUserDTO> {      
       try {
         const memberUser = await this.repository.findById({ where: { id: userId}});
         if (memberUser === null) {
           throw new NotFoundException('Usuário administrador foi encontrado');
-        }  
-
-        if (memberUser.tipo === UserPerfilEnum.PERFIL_USUARIO_COMUM) {
+        }          
+        if (memberUser.tipo === UserPerfilEnum.PERFIL_COMUM) {          
           throw new HttpException(`O usuário ${memberUser.nome} não tem permissões de cadastrar usuário`, HttpStatus.FORBIDDEN);
         }
-
         const user: CreateUserDTO = await this.repository.create({data: {        
             login: dataUser.login,
             senha: dataUser.senha,
@@ -36,15 +39,14 @@ export class UserService {
         return user;
       }
       catch (error) {
-        console.error('Erro ao criar usuário:', error);
-        throw error;
+        throw new InternalServerErrorException('Erro ao criar usuário');
       }
   }
 
   
   async createUserMainAdmin(dataUser: CreateUserMainAdminDTO): Promise<CreateUserMainAdminDTO> {
     try {
-
+      console.log("🚀 ~ UserService ~ createUserMainAdmin ~ createUserMainAdmin:");
       const memberUser = await this.repository.findAll({ take: 1 });
       
       if (memberUser.length > 0) {
@@ -58,7 +60,7 @@ export class UserService {
           endereco: dataUser.endereco || '',
           email: dataUser.email,
           cpf: dataUser.cpf,
-          tipo: UserPerfilEnum.PERFIL_USUARIO_ADM,
+          tipo: UserPerfilEnum.PERFIL_ADMIN,
       }});
       return plainToInstance(CreateUserMainAdminDTO, user);
 
@@ -77,8 +79,11 @@ export class UserService {
     }; 
 
     return users.map((user) => ({
+      id: user.id,
       login: user.login,
+      senha: user.senha,
       nome: user.nome,
+      endereco: user.endereco,
       email: user.email,
       cpf: user.cpf,
       tipo: user.tipo,
@@ -104,16 +109,26 @@ public async findUserByName(nome: string): Promise<ListUserDTO[]> {
 }  
 
 ////
-public async updateUser(id: number, dataCategory: CreateUserDTO) {
+async findUserProfile(): Promise<ENUM_PROFILE[]> {
+  return Object.keys(UserPerfilEnum).map(key => ({
+    key: key,
+    nome: UserPerfilEnum[key as keyof typeof UserPerfilEnum],
+  }));  
+  //return Object.values(UserPerfilEnum);
+}  
+
+////
+public async updateUser(id: number, dataUser: CreateUserDTO) {  
   const User: CreateUserDTO = await this.repository.update( {      
       where: { id: Number(id) },
       data: {
-        nome: dataCategory.nome, 
-        login: dataCategory.login,
-        senha: dataCategory.senha,
-        email: dataCategory.email,
-        cpf: dataCategory.cpf,
-        tipo: dataCategory.tipo,
+        nome: dataUser.nome, 
+        login: dataUser.login,
+        senha: dataUser.senha,
+        endereco: dataUser.endereco,
+        email: dataUser.email,
+        cpf: dataUser.cpf,
+        tipo: dataUser.tipo,
       }}
   );    
   return User;

@@ -8,19 +8,19 @@ datasource db {
 }
 
 model Usuario {
-        id        Int       @id @default(autoincrement())
+        id        Int                @id @default(autoincrement())
         login     String
         senha     String
         nome      String
         endereco  String
         email     String
         cpf       String
-        tipo      String
-        voto      Votacao[] @relation("usuario")
+        tipo      PerfilUsuarioEnum? @default(PERFIL_COMUM)
+        voto      Votacao[]          @relation("usuario")
         Pauta     Pauta[]
-        createdAt DateTime  @default(now())
-        updatedAt DateTime  @default(now())
-        deletedAt DateTime  @default(now())
+        createdAt DateTime           @default(now())
+        updatedAt DateTime           @default(now())
+        deletedAt DateTime           @default(now())
 }
 
 model Votacao {
@@ -79,4 +79,9 @@ enum StatusSessaoEnum {
         STATUS_INICIADA
         STATUS_CONCLUIDA
         STATUS_CANCELADA
+}
+
+enum PerfilUsuarioEnum {
+        PERFIL_ADMIN
+        PERFIL_COMUM
 }

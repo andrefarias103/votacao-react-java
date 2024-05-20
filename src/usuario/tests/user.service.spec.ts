@@ -27,7 +27,7 @@ describe('UserService', () => {
         endereco: 'Av. São Luis 44',
         email: 'jcl@hotmail.com',
         cpf: '801.711.024.12',
-        tipo: UserPerfilEnum.PERFIL_USUARIO_COMUM,
+        tipo: UserPerfilEnum.PERFIL_COMUM,
       };
       jest.spyOn(userService, 'createUser').mockResolvedValue(mockUserDto);
 
@@ -44,7 +44,7 @@ describe('UserService', () => {
         endereco: 'Av. São Luis 44',
         email: 'jcl@hotmail.com',
         cpf: '801.711.024.12',
-        tipo: UserPerfilEnum.PERFIL_USUARIO_COMUM,
+        tipo: UserPerfilEnum.PERFIL_COMUM,
       };
 
       const result = userService.createUser(userId, mockUserDto);

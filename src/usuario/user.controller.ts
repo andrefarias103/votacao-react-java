@@ -2,14 +2,14 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { CreateUserMainAdminDTO } from './dto/create-user-main-admin.dto';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { ListUserDTO } from './dto/select-user.dto';
-import { UserService } from './user.service';
+import { ENUM_PROFILE, UserService } from './user.service';
 
 @Controller('/usuario')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post(':id')
-  async createUser(@Param('id') userId: number, @Body() dataUser: CreateUserDTO): Promise<CreateUserDTO> {
+  async createUser(@Param('id') userId: number, @Body() dataUser: CreateUserDTO): Promise<CreateUserDTO> { 
     return this.userService.createUser(userId, dataUser);
   }
 
@@ -26,6 +26,12 @@ export class UserController {
   @Get('/filtro_nome/:nome')
   async findUserByName(@Param('nome') nome: string) {
     return await this.userService.findUserByName(nome);
+  }  
+
+  @Get('/filtro_perfil')
+  async findUserProfile(): Promise<ENUM_PROFILE[]> {
+    const profile =  await this.userService.findUserProfile();
+    return profile;
   }  
 
   @Get()

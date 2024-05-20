@@ -34,7 +34,7 @@ export class AgendaService {
       throw new NotFoundException(`Usuário [${userId}]: Não foi encontrado'`);      
     } 
 
-    if (user.tipo === UserPerfilEnum.PERFIL_USUARIO_COMUM) {
+    if (user.tipo === UserPerfilEnum.PERFIL_COMUM) {
       throw new HttpException(`Usuário[${userId}]: Não tem perfil de Administrador`, HttpStatus.FORBIDDEN);
     }    
 

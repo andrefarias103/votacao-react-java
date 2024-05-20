@@ -1,5 +1,6 @@
+import { PerfilUsuarioEnum } from '@prisma/client';
 import { Exclude, Expose } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 import { ValidationCPF } from '../validation/cpf.validator';
 
 @Exclude()
@@ -19,6 +20,7 @@ export class CreateUserDTO {
   @IsNotEmpty()
   nome: string;
 
+  @Expose()
   @IsOptional()
   endereco: string;
 
@@ -34,6 +36,7 @@ export class CreateUserDTO {
 
   @Expose()
   @IsNotEmpty()
-  tipo: string;
+  @IsEnum(PerfilUsuarioEnum)
+  tipo: PerfilUsuarioEnum;
   
 }
