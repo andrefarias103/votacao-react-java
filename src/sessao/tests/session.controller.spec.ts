@@ -24,14 +24,13 @@ describe('SessionController', () => {
 
     describe('create Session', () => {
         it('should create session', async () => {
-            const pautaId = 1;
             const mockSessionDto: CreateSessionDto = {
                 dataHoraInicio: '15/04/2024 14:00:00',
                 dataHoraFim: '15/04/2024 14:30:00',
             };
             jest.spyOn(controller, 'createSession').mockResolvedValue(mockSessionDto);
     
-            const createSession = await controller.createSession(pautaId, mockSessionDto);
+            const createSession = await controller.createSession(mockSessionDto);
             expect(createSession).toEqual(mockSessionDto);        
         });
     })
@@ -39,11 +38,13 @@ describe('SessionController', () => {
     describe('find All Sessions', () => {
         it('should return all sessions', async () => {
             const mockSessionDto: ListSessionDto[] = [{
+                id: '1',
                 dataHoraInicio: '16/04/2024 10:00:00',
                 dataHoraFim: '16/04/2024 10:04:00',
                 status: 'Iniciada',
             },
             {
+                id: '2',
                 dataHoraInicio: '16/04/2024 10:00:00',
                 dataHoraFim: '16/04/2024 10:04:00',
                 status: 'Iniciada',

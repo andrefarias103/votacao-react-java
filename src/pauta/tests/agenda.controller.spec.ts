@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TRepository } from '../../repository/repository';
+import { SessionService } from '../../sessao/session.service';
 import { VotationController } from '../../votacao/votation.controller';
 import { VotationService } from '../../votacao/votation.service';
 import { AgendaController } from '../agenda.controller';
@@ -14,7 +15,7 @@ describe('AgendaController', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
       controllers: [AgendaController, VotationController],
-      providers: [AgendaService, VotationService, TRepository],
+      providers: [AgendaService, VotationService, SessionService, TRepository],
     }).compile();
 
     controller = module.get<AgendaController>(AgendaController);
@@ -30,7 +31,9 @@ describe('AgendaController', () => {
       const categoryId = 1;
       const mockAgendaDto: CreateAgendaDto = {
         titulo: 'Votação do reajuste do vale-refeição',
-        descricao:  'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',        
+        descricao:  'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',   
+        dataHoraInicio: '2024-05-21 10:00:00',
+        dataHoraFim: '2024-05-21 11:00:00'     
       };
       jest.spyOn(controller, 'createAgenda').mockResolvedValue(mockAgendaDto);
 

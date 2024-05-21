@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { StatusSessaoEnum } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { TRepository } from '../repository/repository';
+import { SessionService } from '../sessao/session.service';
 import { UserPerfilEnum } from '../usuario/enums/user-perfil.enum';
 import { VotationService } from '../votacao/votation.service';
 import { CreateAgendaDto } from './dto/create-agenda.dto';
@@ -15,7 +16,7 @@ export class AgendaService {
   private readonly repositoryVotation: TRepository;
 
   ////
-  constructor(private readonly repositoryAgenda: TRepository, private readonly serviceVotation: VotationService) 
+  constructor(private readonly repositoryAgenda: TRepository, private readonly serviceVotation: VotationService, private readonly serviceSession: SessionService) 
   {
     this.repositoryAgenda = new TRepository('pauta');
     this.repositoryCategory = new TRepository('categoria');
@@ -24,9 +25,10 @@ export class AgendaService {
   }
 
   ////
-  public async createAgenda(userId: number, categoryId: number, dataAgenda: CreateAgendaDto): Promise<CreateAgendaDto> 
+  public async createAgenda(userId: number, dataAgenda: CreateAgendaDto): Promise<CreateAgendaDto> 
   {
-    const category = await this.repositoryCategory.findById({ where: { id: categoryId}});
+    const categoriaId: number = Number(dataAgenda.categoriaId);
+    const category = await this.repositoryCategory.findById({ where: { id: categoriaId }});
     if (category === null) { throw new NotFoundException('Categoria não foi encontrada')};
 
     const user = await this.repositoryUser.findById({ where: { id: userId }});
@@ -38,12 +40,17 @@ export class AgendaService {
       throw new HttpException(`Usuário[${userId}]: Não tem perfil de Administrador`, HttpStatus.FORBIDDEN);
     }    
 
+    const {dataHoraInicio, dataHoraFim} = dataAgenda; 
+
+    const session = await this.serviceSession.createSession({dataHoraInicio, dataHoraFim})
+
     const agenda: CreateAgendaDto = await this.repositoryAgenda.create( {data:
       {          
         titulo: dataAgenda.titulo, 
         descricao: dataAgenda.descricao,        
-        categoria: { connect: { id: categoryId}},   
+        categoria: { connect: { id: categoriaId}},   
         usuario:   { connect: { id: userId }},
+        Sessao:   { connect: { id: session.id }},
       }});
 
     return agenda;
@@ -127,6 +134,23 @@ export class AgendaService {
 
   }
 
+  public async findAgendaById(id: number): Promise<ListAgendaDto[]> {      
+    const agenda: ListAgendaDto[] = await this.repositoryAgenda.findById({ where: { id }});      
+      if (!agenda) {
+          return [];
+      };
+    return plainToInstance(ListAgendaDto, agenda);
+  }  
+
+  ////
+  public async findAgendaByName(nome: string): Promise<ListAgendaDto[]> {
+  const agenda: ListAgendaDto[] = await this.repositoryAgenda.findAll({ where: { titulo: { contains: nome, mode: 'insensitive', } }});      
+    if (!agenda) {
+        return [];
+    };
+  return plainToInstance(ListAgendaDto, agenda);
+  } 
+
   ////
   public async findAgenda(agendaId: number): Promise<ListAgendaDto>
   {
@@ -137,6 +161,39 @@ export class AgendaService {
     return agenda;    
   }
 
+  ////
+  public async updateAgenda(id: number, dataAgenda: CreateAgendaDto) {
+    
+    const categoriaId: number = Number(dataAgenda.categoriaId);
+
+    const agenda: ListAgendaDto = await this.repositoryAgenda.update( {      
+        where: { id: Number(id) },
+        data: {
+          titulo: dataAgenda.titulo, 
+          descricao: dataAgenda.descricao,
+          categoriaId: categoriaId,          
+        }}
+    );    
+    
+    const {dataHoraInicio, dataHoraFim} = dataAgenda; 
+
+    if(agenda.sessaoId) {
+      const session = await this.serviceSession.updateSession(agenda.sessaoId, {dataHoraInicio, dataHoraFim})
+    }
+
+    return agenda;
+  }  
+
+  ////
+  public async deleteAgenda(id: number) {
+    const agenda = await this.repositoryAgenda.delete( {      
+        where: { id: Number(id) }
+      }
+    );    
+    return agenda;
+  }    
+
 
 
 }
+

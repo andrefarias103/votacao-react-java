@@ -23,15 +23,31 @@ export class ListAgendaDto {
 
     @Expose()
     @IsOptional()
+    categoriaId?: number        
+
+    @Expose()
+    @IsOptional()
     @ValidateNested()
     @Type(() => ListSessionDto)
-    Sessao?: ListSessionDto        
+    Sessao?: ListSessionDto       
+    
+    @Expose()
+    @IsOptional()
+    sessaoId?: number       
+
+    @Expose()
+    @IsOptional()
+    usuarioId?: number          
 
     @Expose()
     @IsOptional()
     @ValidateNested()
     @Type(() => ListVotacionDto)
     votacao?: ListVotacionDto    
+
+    @Expose()
+    @IsOptional()
+    votacaoId?: number      
     
     @Expose()
     @IsOptional()

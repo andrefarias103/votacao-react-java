@@ -8,7 +8,7 @@ export class TRepository {
       this.modelName = modelName;
     }
 
-    public async create<T>(props?:any) {
+    public async create<T>(props?:any) {      
       const model = await prisma[this.modelName].create(props);    
       return model;
     }    
@@ -29,6 +29,7 @@ export class TRepository {
     public async findById<T>(props?:any) {     
       return await prisma[this.modelName].findUnique(props);        
     }
+      
 
     public async findByWhere<T>(dataModel:T) {
       return await prisma[this.modelName].findMany({ 
@@ -43,6 +44,7 @@ export class TRepository {
     }
 
 }
+    
 
 
 

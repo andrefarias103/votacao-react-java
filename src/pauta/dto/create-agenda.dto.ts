@@ -1,13 +1,13 @@
-import { Exclude, Expose } from "class-transformer";
 import { IsNotEmpty, IsOptional } from "class-validator";
+import { CreateSessionDto } from "../../sessao/dto/create-session.dto";
 
-@Exclude()
-export class CreateAgendaDto {
-    @Expose()
+export class CreateAgendaDto extends CreateSessionDto {
     @IsNotEmpty()
     titulo: string;
 
-    @Expose()
     @IsOptional()
     descricao: string;
+
+    @IsNotEmpty()
+    categoriaId: number;
 }

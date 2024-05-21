@@ -1,15 +1,15 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { AgendaService } from './agenda.service';
 import { CreateAgendaDto } from './dto/create-agenda.dto';
 import { ListAgendaDto } from './dto/select-agenda.dto';
 
-@Controller('pautas')
+@Controller('/pauta')
 export class AgendaController {
   constructor(private readonly agendaService: AgendaService) {}
 
-  @Post()
-  async createAgenda(@Query('usuarioId') userId: number, @Query('categoriaId') categoryId: number, @Body() dataAgenda: CreateAgendaDto): Promise<CreateAgendaDto> {
-    const agenda: CreateAgendaDto = await this.agendaService.createAgenda(userId, categoryId, dataAgenda);
+  @Post(':usuarioId')
+  async createAgenda(@Param('usuarioId') userId: number, @Body() dataAgenda): Promise<CreateAgendaDto> {
+    const agenda: CreateAgendaDto = await this.agendaService.createAgenda(userId, dataAgenda);
     return agenda;
   }
 
@@ -22,10 +22,19 @@ export class AgendaController {
   async findStartAgendas() {
     return await this.agendaService.findStartAgendasByCategory();
   }
+
+  @Get('/filtro_id/:id')
+  async findUserById(@Param('id') id: number) {
+    return await this.agendaService.findAgendaById(id);
+  }
   
+  @Get('/filtro_nome/:nome')
+  async findAgendaByName(@Param('nome') nome: string) {
+    return await this.agendaService.findAgendaByName(nome);
+  }  
+
   @Get()
   async findAllAgendas(): Promise<ListAgendaDto[]> {
-    console.log('findAllAgendas');
     return await this.agendaService.findAllAgendas();
   }
 
@@ -37,6 +46,16 @@ export class AgendaController {
   @Get('/:pautaId')
   async findAgenda(@Param('pautaId') agendaId: number) {
     return await this.agendaService.findAgenda(agendaId);
+  }
+
+  @Put(':id')
+  async updateAgenda(@Param('id') id: number, @Body() dataAgenda) {
+    return await this.agendaService.updateAgenda(id, dataAgenda);
+  }
+
+  @Delete(':id')
+  async deleteAgenda(@Param('id') id: number) {
+    return await this.agendaService.deleteAgenda(id);
   }
 
 }

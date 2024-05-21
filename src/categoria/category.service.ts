@@ -51,12 +51,12 @@ export class CategoryService {
   }  
 
   ////
-  public async updateCategory(id: number, dadosCategoria: CreateCategoryDto) {
+  public async updateCategory(id: number, dataCategory: CreateCategoryDto) {
     const category: CreateCategoryDto = await this.repository.update( {      
         where: { id: Number(id) },
         data: {
-          nome: dadosCategoria.nome, 
-          descricao: dadosCategoria.descricao,
+          nome: dataCategory.nome, 
+          descricao: dataCategory.descricao,
         }}
     );    
     return category;

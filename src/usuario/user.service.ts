@@ -46,7 +46,7 @@ export class UserService {
   
   async createUserMainAdmin(dataUser: CreateUserMainAdminDTO): Promise<CreateUserMainAdminDTO> {
     try {
-      console.log("🚀 ~ UserService ~ createUserMainAdmin ~ createUserMainAdmin:");
+      
       const memberUser = await this.repository.findAll({ take: 1 });
       
       if (memberUser.length > 0) {

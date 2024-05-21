@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { StatusSessaoEnum } from '@prisma/client';
+import { plainToInstance } from 'class-transformer';
 import { TRepository } from '../repository/repository';
 import { getDateFinal, getDateFormat } from '../utils/date-operations.utils';
 import { CreateSessionDto } from './dto/create-session.dto';
@@ -16,31 +17,51 @@ export class SessionService {
     this.repositoryAgenda = new TRepository('pauta');
   }
   
-  ////
-  public async createSession(agendaId: number, sessionData: CreateSessionDto): Promise<CreateSessionDto> {
+  // ////
+  // public async createSession(agendaId: number, sessionData: CreateSessionDto): Promise<CreateSessionDto> {
     
-      const agenda = await this.repositoryAgenda.findById({ where: { id: agendaId}});
-      if (agenda === null) { 
-        throw new NotFoundException(`Pauta [${agendaId}]: Não foi encontrada'`)
-      };
+  //     const agenda = await this.repositoryAgenda.findById({ where: { id: agendaId}});
+  //     if (agenda === null) { 
+  //       throw new NotFoundException(`Pauta [${agendaId}]: Não foi encontrada'`)
+  //     };
     
-      const datetime_final: Date = getDateFinal(sessionData.dataHoraInicio, sessionData.dataHoraFim );
+  //     const datetime_final: Date = getDateFinal(sessionData.dataHoraInicio, sessionData.dataHoraFim );
       
-      const datetime_initial = new Date(sessionData.dataHoraInicio);  
-      if (datetime_final <= datetime_initial) {
-        throw new Error('Data hora final é menor ou igual a data hora inicial');
-      }
+  //     const datetime_initial = new Date(sessionData.dataHoraInicio);  
+  //     if (datetime_final <= datetime_initial) {
+  //       throw new Error('Data hora final é menor ou igual a data hora inicial');
+  //     }
 
-      const createSession: CreateSessionDto = await this.repository.create(
-        {data: { 
-                dataHoraInicio: sessionData.dataHoraInicio, 
-                dataHoraFim: getDateFormat(datetime_final),
-                Pauta: { connect: { id: agenda?.id }}, 
-                status: StatusSessaoEnum.STATUS_AGUARDANDO,
-      }});    
-      return createSession;
+  //     const createSession: CreateSessionDto = await this.repository.create(
+  //       {data: { 
+  //               dataHoraInicio: sessionData.dataHoraInicio, 
+  //               dataHoraFim: getDateFormat(datetime_final),
+  //               Pauta: { connect: { id: agenda?.id }}, 
+  //               status: StatusSessaoEnum.STATUS_AGUARDANDO,
+  //     }});    
+  //     return createSession;
       
-  }
+  // }
+
+  ////
+  public async createSession(sessionData: CreateSessionDto): Promise<ListSessionDto> {
+      
+    const datetime_final: Date = getDateFinal(sessionData.dataHoraInicio, sessionData.dataHoraFim );
+    
+    const datetime_initial = new Date(sessionData.dataHoraInicio);  
+    if (datetime_final <= datetime_initial) {
+      throw new Error('Data hora final é menor ou igual a data hora inicial');
+    }
+
+    const createSession: CreateSessionDto = await this.repository.create(
+      {data: { 
+              dataHoraInicio: sessionData.dataHoraInicio, 
+              dataHoraFim: getDateFormat(datetime_final), 
+              status: StatusSessaoEnum.STATUS_AGUARDANDO,
+    }});    
+    return plainToInstance(ListSessionDto, createSession);
+    
+}  
 
   ////
   public async startAllSessions(): Promise<Boolean>  {
@@ -110,5 +131,25 @@ export class SessionService {
     };       
    return sessions;   
   }
+
+  public async findSessionById(id: number): Promise<ListSessionDto[]> {      
+    const session: ListSessionDto[] = await this.repository.findById({ where: { id }});      
+      if (!session) {
+          return [];
+      };
+    return plainToInstance(ListSessionDto, session);
+  }  
+
+    ////
+    public async updateSession(id: number, dataSession: CreateSessionDto) {
+      const session: CreateSessionDto = await this.repository.update( {      
+          where: { id: Number(id) },
+          data: {
+            dataHoraInicio: dataSession.dataHoraInicio, 
+            dataHoraFim: dataSession.dataHoraFim,
+          }}
+      );    
+      return session;
+    }  
 
 }

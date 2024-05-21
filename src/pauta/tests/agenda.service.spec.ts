@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { TRepository } from '../../repository/repository';
+import { SessionService } from '../../sessao/session.service';
 import { VotationService } from '../../votacao/votation.service';
 import { AgendaService } from '../agenda.service';
 import { CreateAgendaDto } from '../dto/create-agenda.dto';
@@ -8,10 +9,11 @@ import { ListAgendaDto } from '../dto/select-agenda.dto';
 describe('AgendaService', () => {
   let serviceAgenda: AgendaService;
   let serviceVotation: VotationService;
+  let serviceSession: SessionService;
   let repositoryAgenda: TRepository;
 
   beforeEach(async () => {
-    serviceAgenda = new AgendaService(repositoryAgenda, serviceVotation);
+    serviceAgenda = new AgendaService(repositoryAgenda, serviceVotation, serviceSession);
     });
 
   it('should be defined', () => {
@@ -24,7 +26,9 @@ describe('AgendaService', () => {
       const categoryId: number = 1;
       const mockAgendaDto: CreateAgendaDto = {
         titulo: 'Votação do reajuste do vale-refeição',
-        descricao:  'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',        
+        descricao:  'Será votado o aumento de 1% de reajuste no valor do vale-refeição dos funcionários',
+        dataHoraInicio: '2024-05-21 10:00:00',
+        dataHoraFim: '2024-05-21 11:00:00'                   
       };
       jest.spyOn(serviceAgenda, 'createAgenda').mockResolvedValue(mockAgendaDto);
       
