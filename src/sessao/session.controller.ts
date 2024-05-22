@@ -7,12 +7,6 @@ import { SessionService } from './session.service';
 export class SessionController {
   constructor(private readonly sessaoService: SessionService) {}
 
-  // @Post()
-  // async createSession(@Query('pautaId') agendaId: number, @Body() dataSession: CreateSessionDto): Promise<CreateSessionDto> {
-  //   const session: CreateSessionDto = await this.sessaoService.createSession(agendaId, dataSession);
-  //   return session;
-  // }
-
   @Post()
   async createSession(@Body() dataSession: CreateSessionDto): Promise<CreateSessionDto> {
     const session: CreateSessionDto = await this.sessaoService.createSession(dataSession);

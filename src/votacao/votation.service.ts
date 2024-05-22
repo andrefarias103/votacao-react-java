@@ -65,11 +65,6 @@ export class VotationService {
 
     const totalVotes = await this.repository.recordCountById({ pautaId: agendaId });
     
-    // const totalVotesYes = await this.repository.recordCountById({ pautaId: agendaId, opcaoVotada: 'Sim' });
-    // console.log(`Total de Votos (Sim): ${totalVotesYes}`);
-
-    // const totalVotesNo = await this.repository.recordCountById({ pautaId: agendaId, opcaoVotada: 'Não' });
-    // console.log(`Total de Votos (Não): ${totalVotesNo}`);
     return totalVotes;
   }
 

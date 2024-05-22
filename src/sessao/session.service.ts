@@ -17,32 +17,6 @@ export class SessionService {
     this.repositoryAgenda = new TRepository('pauta');
   }
   
-  // ////
-  // public async createSession(agendaId: number, sessionData: CreateSessionDto): Promise<CreateSessionDto> {
-    
-  //     const agenda = await this.repositoryAgenda.findById({ where: { id: agendaId}});
-  //     if (agenda === null) { 
-  //       throw new NotFoundException(`Pauta [${agendaId}]: Não foi encontrada'`)
-  //     };
-    
-  //     const datetime_final: Date = getDateFinal(sessionData.dataHoraInicio, sessionData.dataHoraFim );
-      
-  //     const datetime_initial = new Date(sessionData.dataHoraInicio);  
-  //     if (datetime_final <= datetime_initial) {
-  //       throw new Error('Data hora final é menor ou igual a data hora inicial');
-  //     }
-
-  //     const createSession: CreateSessionDto = await this.repository.create(
-  //       {data: { 
-  //               dataHoraInicio: sessionData.dataHoraInicio, 
-  //               dataHoraFim: getDateFormat(datetime_final),
-  //               Pauta: { connect: { id: agenda?.id }}, 
-  //               status: StatusSessaoEnum.STATUS_AGUARDANDO,
-  //     }});    
-  //     return createSession;
-      
-  // }
-
   ////
   public async createSession(sessionData: CreateSessionDto): Promise<ListSessionDto> {
       
@@ -113,13 +87,6 @@ export class SessionService {
     })
 
     return listSessions;
-
-    // return sessions.map((session) => (
-    //   {
-    //   dataHoraInicio: session.dataHoraInicio,
-    //   dataHoraFim: session.dataHoraFim,
-    //   status: session.status
-    // }));
   }
 
   ////
