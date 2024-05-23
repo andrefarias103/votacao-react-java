@@ -46,12 +46,14 @@ export class UserService {
   
   async createUserMainAdmin(dataUser: CreateUserMainAdminDTO): Promise<CreateUserMainAdminDTO> {
     try {
-      
+
       const memberUser = await this.repository.findAll({ take: 1 });
       
       if (memberUser.length > 0) {
         throw new HttpException(`O sistema já possui um adminsitrador principal`, HttpStatus.FORBIDDEN);
       }  
+
+      
 
       const user: CreateUserDTO = await this.repository.create({data: {        
           login: dataUser.login,

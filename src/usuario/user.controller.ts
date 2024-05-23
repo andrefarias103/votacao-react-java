@@ -4,7 +4,7 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { ListUserDTO } from './dto/select-user.dto';
 import { ENUM_PROFILE, UserService } from './user.service';
 
-@Controller('/usuario')
+@Controller('usuario')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -13,8 +13,9 @@ export class UserController {
     return this.userService.createUser(userId, dataUser);
   }
 
-  @Post('/main_admin')
+  @Post('/main_admin/')
   async createUserMainAdmin(@Body() dataUser: CreateUserMainAdminDTO): Promise<CreateUserMainAdminDTO> {
+    console.log('chegou aqui1');
     return this.userService.createUserMainAdmin(dataUser);
   }
 

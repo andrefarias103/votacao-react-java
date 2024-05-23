@@ -114,7 +114,7 @@ export class AgendaService {
       agendas = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { categoriaId: categoryId, Sessao: {status: StatusSessaoEnum.STATUS_INICIADA}}});   
     } 
     else {      
-      agendas = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { Sessao: {status: StatusSessaoEnum.STATUS_INICIADA}}});   
+      agendas = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { Sessao: {status: StatusSessaoEnum.STATUS_INICIADA}}});         
     }
 
     const itemAgendas = agendas.map((item) => { 

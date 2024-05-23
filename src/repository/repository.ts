@@ -21,6 +21,11 @@ export class TRepository {
       return  await prisma[this.modelName].delete(props);
     }
 
+    public async findFirst<T>(props?:any): Promise<T[]> 
+    {
+      return  await prisma[this.modelName].findFirst(props);
+    }
+
     public async findAll<T>(props?:any): Promise<T[]> 
     {
       return  await prisma[this.modelName].findMany(props);
@@ -31,10 +36,8 @@ export class TRepository {
     }
       
 
-    public async findByWhere<T>(dataModel:T) {
-      return await prisma[this.modelName].findMany({ 
-          where: dataModel
-        });
+    public async findByWhere<T>(props?:any) {
+      return await prisma[this.modelName].findMany(props);
     }
   
     public async recordCountById<T>(dataModel: T): Promise<number> {
@@ -44,6 +47,7 @@ export class TRepository {
     }
 
 }
+    
     
 
 

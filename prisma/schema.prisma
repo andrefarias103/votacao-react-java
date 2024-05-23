@@ -14,7 +14,7 @@ model Usuario {
         nome      String
         endereco  String
         email     String
-        cpf       String
+        cpf       String             @unique()
         tipo      PerfilUsuarioEnum? @default(PERFIL_COMUM)
         voto      Votacao[]          @relation("usuario")
         Pauta     Pauta[]

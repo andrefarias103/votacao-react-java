@@ -12,12 +12,12 @@ export class CreateVotationDto {
     // @IsNotEmpty()
     // dataHoraVoto: string
 
-    // @Expose()
-    // @IsNotEmpty()
-    // usuarioId: number; 
+    @Expose()
+    @IsNotEmpty()
+    pautaId: number; 
 
     // @Expose()
     // @IsNotEmpty()
-    // pautaId: number;    
+    // usuarioId: number;    
 
 }

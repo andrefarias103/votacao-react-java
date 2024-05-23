@@ -3,7 +3,7 @@ import { Exclude, Expose } from 'class-transformer';
 @Exclude()
 export class ListUserDTO {
   @Expose()
-  id: string;
+  id: number;
   @Expose()
   login: string;
   @Expose()
