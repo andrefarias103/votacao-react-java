@@ -1,6 +1,6 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { IsNumber, IsOptional, ValidateNested } from 'class-validator';
-import { ListCategoryDto } from '../../categoria/dto/select-categoria.dto';
+import { ListCategoryDto } from '../../categoria/dto/select-category.dto';
 import { ListSessionDto } from '../../sessao/dto/select-session.dto';
 import { ListVotacionDto } from '../../votacao/dto/select-votation.dto';
 

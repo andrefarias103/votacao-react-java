@@ -1,4 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { UserInfo } from 'src/utils/userInfo.utils';
+import { AuthenticationGuard } from './../autenticacao/authentication.guard';
+import { Roles } from './../autenticacao/roles';
+import { RolesGuard } from './../autenticacao/roles.guard';
+import { UserProfileEnum } from './../usuario/enums/user-profile.enum';
 import { AgendaService } from './agenda.service';
 import { CreateAgendaDto } from './dto/create-agenda.dto';
 import { ListAgendaDto } from './dto/select-agenda.dto';
@@ -7,8 +12,10 @@ import { ListAgendaDto } from './dto/select-agenda.dto';
 export class AgendaController {
   constructor(private readonly agendaService: AgendaService) {}
 
-  @Post(':usuarioId')
-  async createAgenda(@Param('usuarioId') userId: number, @Body() dataAgenda): Promise<CreateAgendaDto> {
+  @Post()
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)  
+  async createAgenda(@UserInfo() userId: number, @Body() dataAgenda): Promise<CreateAgendaDto> {
     const agenda: CreateAgendaDto = await this.agendaService.createAgenda(userId, dataAgenda);
     return agenda;
   }
@@ -49,11 +56,15 @@ export class AgendaController {
   }
 
   @Put(':id')
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)  
   async updateAgenda(@Param('id') id: number, @Body() dataAgenda) {
     return await this.agendaService.updateAgenda(id, dataAgenda);
   }
 
   @Delete(':id')
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)  
   async deleteAgenda(@Param('id') id: number) {
     return await this.agendaService.deleteAgenda(id);
   }

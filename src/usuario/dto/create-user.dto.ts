@@ -1,6 +1,6 @@
-import { PerfilUsuarioEnum } from '@prisma/client';
 import { Exclude, Expose } from 'class-transformer';
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, Matches } from 'class-validator';
+import { UserProfileEnum } from '../enums/user-profile.enum';
 import { ValidationCPF } from '../validation/cpf.validator';
 
 @Exclude()
@@ -13,7 +13,10 @@ export class CreateUserDTO {
   @IsNotEmpty({
     message: 'A senha deve ser informada',
   })
-  @MinLength(8, { message: 'A senha deve conter 8 caracteres' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W+)(.{8,30})$/, {
+    message:
+      'A senha deve conter pelo menos uma letra minúscula, uma letra maiúscula, um dígito, um caractere especial e ter entre 8 e 30 caracteres',
+  })  
   senha: string;
 
   @Expose()
@@ -36,7 +39,7 @@ export class CreateUserDTO {
 
   @Expose()
   @IsNotEmpty()
-  @IsEnum(PerfilUsuarioEnum)
-  tipo: PerfilUsuarioEnum;
+  @IsEnum(UserProfileEnum)
+  tipo: UserProfileEnum;
   
 }

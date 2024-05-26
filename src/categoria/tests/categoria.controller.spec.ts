@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TRepository } from '../../repository/repository';
 import { CategoryController } from '../category.controller';
 import { CategoryService } from '../category.service';
-import { CreateCategoryDto } from '../dto/create-categoria.dto';
-import { ListCategoryDto } from '../dto/select-categoria.dto';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { ListCategoryDto } from '../dto/select-category.dto';
 
 describe('CategoryController', () => {
   let controller: CategoryController;

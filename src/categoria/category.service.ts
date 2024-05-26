@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { TRepository } from '../repository/repository';
-import { CreateCategoryDto } from './dto/create-categoria.dto';
-import { ListCategoryDto } from './dto/select-categoria.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { ListCategoryDto } from './dto/select-category.dto';
 
 @Injectable()
 export class CategoryService {  

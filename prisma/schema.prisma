@@ -9,11 +9,11 @@ datasource db {
 
 model Usuario {
         id        Int                @id @default(autoincrement())
-        login     String
+        login     String             @unique()
         senha     String
         nome      String
         endereco  String
-        email     String
+        email     String             @unique()
         cpf       String             @unique()
         tipo      PerfilUsuarioEnum? @default(PERFIL_COMUM)
         voto      Votacao[]          @relation("usuario")

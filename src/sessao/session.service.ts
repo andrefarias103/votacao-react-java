@@ -39,12 +39,10 @@ export class SessionService {
 
   ////
   public async startAllSessions(): Promise<Boolean>  {
-    const dataAtual =  getDateFormat(new Date(Date.now())); //.toISOString().split('T')[0];
-    // console.log(`******************************************verifca data e hora ${dataAtual}`);
-    const sessions = await this.repository.findByWhere({ 
-                                                          status: StatusSessaoEnum.STATUS_AGUARDANDO,
-                                                          dataHoraInicio: { lte: dataAtual},
-                                                          dataHoraFim: { gte: dataAtual}
+    const dataAtual =  getDateFormat(new Date(Date.now())); 
+    const sessions = await this.repository.findByWhere({ where: {status: StatusSessaoEnum.STATUS_AGUARDANDO,
+                                                                  dataHoraInicio: { lte: dataAtual},
+                                                                  dataHoraFim: { gte: dataAtual} }
                                                         });
     if (sessions === null) {                                             
       return false;
@@ -61,10 +59,10 @@ export class SessionService {
   ////
   public async finishAllSessions() {
     const dataAtual =  getDateFormat(new Date(Date.now())); //.toISOString().split('T')[0];
-    const sessions = await this.repository.findByWhere({ 
+    const sessions = await this.repository.findByWhere({ where: { 
                                                           status: StatusSessaoEnum.STATUS_INICIADA,
                                                           dataHoraInicio: { lte: dataAtual},
-                                                          dataHoraFim: { lte: dataAtual}
+                                                          dataHoraFim: { lte: dataAtual}}
                                                         });
     if (sessions !== null) {
       return sessions.map( (session) => { 

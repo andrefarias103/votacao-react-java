@@ -10,7 +10,6 @@ export class SessionExpirationTask {
 
     @Cron(CronExpression.EVERY_30_MINUTES)
     handleCron() {
-      //this.logger.debug('Called when the current second is 5');
       this.sessionService.startAllSessions();
       this.sessionService.finishAllSessions();
     }

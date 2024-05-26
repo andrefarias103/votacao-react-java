@@ -1,13 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthenticationGuard } from './../autenticacao/authentication.guard';
+import { Roles } from './../autenticacao/roles';
+import { RolesGuard } from './../autenticacao/roles.guard';
+import { UserProfileEnum } from './../usuario/enums/user-profile.enum';
 import { CategoryService } from './category.service';
-import { CreateCategoryDto } from './dto/create-categoria.dto';
-import { ListCategoryDto } from './dto/select-categoria.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { ListCategoryDto } from './dto/select-category.dto';
+
 
 @Controller('categorias')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)
   async createCategory(@Body() dataCategory: CreateCategoryDto) {
     return await this.categoryService.createCategory(dataCategory);
   }
@@ -28,11 +35,15 @@ export class CategoryController {
   }
 
   @Put(':id')
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)  
   async updateCategory(@Param('id') id: number, @Body() dataCategory: CreateCategoryDto) {
     return await this.categoryService.updateCategory(id, dataCategory);
   }
 
   @Delete(':id')
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)  
   async deleteCategory(@Param('id') id: number) {
     return await this.categoryService.deleteCategory(id);
   }

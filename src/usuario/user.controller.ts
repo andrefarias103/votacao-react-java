@@ -1,21 +1,31 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { HashearSenhaPipe } from '../recursos/pipes/hashear-password.pipe';
+import { AuthenticationGuard } from './../autenticacao/authentication.guard';
+import { Roles } from './../autenticacao/roles';
+import { RolesGuard } from './../autenticacao/roles.guard';
 import { CreateUserMainAdminDTO } from './dto/create-user-main-admin.dto';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { ListUserDTO } from './dto/select-user.dto';
-import { ENUM_PROFILE, UserService } from './user.service';
+import { UserProfileEnum } from './enums/user-profile.enum';
+import { UserService } from './user.service';
 
 @Controller('usuario')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post(':id')
-  async createUser(@Param('id') userId: number, @Body() dataUser: CreateUserDTO): Promise<CreateUserDTO> { 
-    return this.userService.createUser(userId, dataUser);
+  @Post('')
+  // @Roles(UserProfileEnum.PERFIL_ADMIN)
+  // @UseGuards(AuthenticationGuard)//,RolesGuard)  
+  async createUser(@Body() { senha, ...dataUser} : CreateUserDTO, @Body('senha', HashearSenhaPipe) senhaHasheada: string ) {                                           
+    const createdUser = await this.userService.createUser({...dataUser, senha: senhaHasheada});
+    return { usuario: new ListUserDTO(),
+             message: 'Usuário criado com sucesso!',
+     }
   }
 
   @Post('/main_admin/')
+  @UseGuards(AuthenticationGuard,RolesGuard)  
   async createUserMainAdmin(@Body() dataUser: CreateUserMainAdminDTO): Promise<CreateUserMainAdminDTO> {
-    console.log('chegou aqui1');
     return this.userService.createUserMainAdmin(dataUser);
   }
 
@@ -30,9 +40,14 @@ export class UserController {
   }  
 
   @Get('/filtro_perfil')
-  async findUserProfile(): Promise<ENUM_PROFILE[]> {
+  async findUserProfile(): Promise<string[]> {
     const profile =  await this.userService.findUserProfile();
     return profile;
+  }  
+
+  @Get(':login')  
+  async findUserByLogin(@Param('login') login: string) {
+    return await this.userService.findUserByLogin(login);
   }  
 
   @Get()
@@ -41,11 +56,15 @@ export class UserController {
   }
 
   @Put(':id')
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)  
   async updateUser(@Param('id') id: number, @Body() dataCategory: CreateUserDTO) {
     return await this.userService.updateUser(id, dataCategory);
   }
 
   @Delete(':id')
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)  
   async deleteUser(@Param('id') id: number) {
     return await this.userService.deleteUser(id);
   }  

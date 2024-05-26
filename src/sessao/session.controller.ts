@@ -1,4 +1,8 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthenticationGuard } from './../autenticacao/authentication.guard';
+import { Roles } from './../autenticacao/roles';
+import { RolesGuard } from './../autenticacao/roles.guard';
+import { UserProfileEnum } from './../usuario/enums/user-profile.enum';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { ListSessionDto } from './dto/select-session.dto';
 import { SessionService } from './session.service';
@@ -8,6 +12,8 @@ export class SessionController {
   constructor(private readonly sessaoService: SessionService) {}
 
   @Post()
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)
   async createSession(@Body() dataSession: CreateSessionDto): Promise<CreateSessionDto> {
     const session: CreateSessionDto = await this.sessaoService.createSession(dataSession);
     return session;
@@ -29,6 +35,8 @@ export class SessionController {
   }
 
   @Put(':id')
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)  
   async updateSession(@Param('id') id: number, @Body() dataSession: CreateSessionDto) {
     return await this.sessaoService.updateSession(id, dataSession);
   }

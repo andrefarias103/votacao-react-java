@@ -1,6 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { AuthenticationGuard } from './../autenticacao/authentication.guard';
+import { Roles } from './../autenticacao/roles';
+import { RolesGuard } from './../autenticacao/roles.guard';
+import { UserProfileEnum } from './../usuario/enums/user-profile.enum';
 import { CreateVotationDto } from './dto/create-votation.dto';
-import { UpdateVotationDto } from './dto/update-votation.dto';
 import { VotationService } from './votation.service';
 
 @Controller('votacao')
@@ -8,18 +11,10 @@ export class VotationController {
   constructor(private readonly votationService: VotationService) {}
 
   @Post(':usuarioId')
+  @Roles(UserProfileEnum.PERFIL_ADMIN)
+  @UseGuards(AuthenticationGuard,RolesGuard)
   public async createVotacao(@Param('usuarioId') usuarioId: number, @Body() dataVotation: CreateVotationDto) {
     return await this.votationService.createVotacao(usuarioId, dataVotation);
-  }
-
-  @Get()
-  findAll() {
-    return this.votationService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.votationService.findOne(+id);
   }
 
   @Get('verifica_voto/:pautaId/:cpf')
@@ -32,16 +27,5 @@ export class VotationController {
     const totalVotes = await this.votationService.getTotalVotes(agendaId);
     return totalVotes;
   }
-
-  @Patch(':id')
-  update(@Query('id') id: string, @Body() updateVotationDto: UpdateVotationDto) {
-    return this.votationService.update(+id, updateVotationDto);
-  }
-
-  @Delete(':id')
-  remove(@Query('id') id: string) {
-    return this.votationService.remove(+id);
-  }
-
 
 }

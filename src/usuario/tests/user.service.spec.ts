@@ -2,7 +2,7 @@ import { HttpException } from '@nestjs/common';
 import { TRepository } from 'src/repository/repository';
 import { CreateUserDTO } from '../dto/create-user.dto';
 import { ListUserDTO } from '../dto/select-user.dto';
-import { UserPerfilEnum } from '../enums/user-perfil.enum';
+import { UserProfileEnum } from '../enums/user-profile.enum';
 import { UserService } from '../user.service';
 
 describe('UserService', () => {
@@ -27,7 +27,7 @@ describe('UserService', () => {
         endereco: 'Av. São Luis 44',
         email: 'jcl@hotmail.com',
         cpf: '801.711.024.12',
-        tipo: UserPerfilEnum.PERFIL_COMUM,
+        tipo: UserProfileEnum.PERFIL_COMUM,
       };
       jest.spyOn(userService, 'createUser').mockResolvedValue(mockUserDto);
 
@@ -44,7 +44,7 @@ describe('UserService', () => {
         endereco: 'Av. São Luis 44',
         email: 'jcl@hotmail.com',
         cpf: '801.711.024.12',
-        tipo: UserPerfilEnum.PERFIL_COMUM,
+        tipo: UserProfileEnum.PERFIL_COMUM,
       };
 
       const result = userService.createUser(userId, mockUserDto);

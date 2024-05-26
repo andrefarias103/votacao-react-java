@@ -1,9 +1,8 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { StatusSessaoEnum } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { TRepository } from '../repository/repository';
 import { SessionService } from '../sessao/session.service';
-import { UserPerfilEnum } from '../usuario/enums/user-perfil.enum';
 import { VotationService } from '../votacao/votation.service';
 import { CreateAgendaDto } from './dto/create-agenda.dto';
 import { ListAgendaDto } from './dto/select-agenda.dto';
@@ -36,9 +35,9 @@ export class AgendaService {
       throw new NotFoundException(`Usuário [${userId}]: Não foi encontrado'`);      
     } 
 
-    if (user.tipo === UserPerfilEnum.PERFIL_COMUM) {
-      throw new HttpException(`Usuário[${userId}]: Não tem perfil de Administrador`, HttpStatus.FORBIDDEN);
-    }    
+    // if (user.tipo === UserProfileEnum.PERFIL_COMUM) {
+    //   throw new HttpException(`Usuário[${userId}]: Não tem perfil de Administrador`, HttpStatus.FORBIDDEN);
+    // }    
 
     const {dataHoraInicio, dataHoraFim} = dataAgenda; 
 

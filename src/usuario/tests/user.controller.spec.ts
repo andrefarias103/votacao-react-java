@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TRepository } from '../../repository/repository';
 import { CreateUserDTO } from '../dto/create-user.dto';
 import { ListUserDTO } from '../dto/select-user.dto';
-import { UserPerfilEnum } from '../enums/user-perfil.enum';
+import { UserProfileEnum } from '../enums/user-profile.enum';
 import { UserController } from '../user.controller';
 import { UserService } from '../user.service';
 
@@ -33,7 +33,7 @@ describe('UserController', () => {
         endereco: 'Av. São Luis 44',
         email: 'jcl@hotmail.com',
         cpf: '801.711.024.12',
-        tipo: UserPerfilEnum.PERFIL_ADMIN,
+        tipo: UserProfileEnum.PERFIL_ADMIN,
       };
       jest.spyOn(userController, 'createUser').mockResolvedValue(mockUserDto);
 
