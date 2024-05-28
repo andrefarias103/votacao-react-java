@@ -1,4 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { UserInfo } from 'src/utils/userInfo.utils';
+import { AuthenticationGuard } from './authentication.guard';
 import { AuthenticationService } from './authentication.service';
 import { AutenticaDTO } from './dto/create-autenticacao.dto';
 
@@ -17,11 +19,10 @@ export class AuthenticationController {
     return await this.authenticationService.validateCPF(cpf);
   }
 
-  @Post('validacao')
-  async validateToken(payload: any) {
-    return await this.authenticationService.validateToken(payload);
+  @Get('profile')
+  @UseGuards(AuthenticationGuard) 
+  async validateToken(@UserInfo() user: any) {
+    return user;
   }
-
-
 
 }

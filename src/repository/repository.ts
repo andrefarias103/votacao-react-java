@@ -40,10 +40,8 @@ export class TRepository {
       return await prisma[this.modelName].findMany(props);
     }
   
-    public async recordCountById<T>(dataModel: T): Promise<number> {
-      return await prisma[this.modelName].count({
-                                                  where: dataModel   
-                                                });
+    public async recordCountById<T>(props?:any): Promise<number> {
+      return await prisma[this.modelName].count(props);
     }
 
 }

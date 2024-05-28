@@ -92,7 +92,7 @@ describe('AgendaService', () => {
   describe('find start agendas', () => {
     it('should not find category', async () => {
       const categoryId: number = 144;
-      await expect(serviceAgenda.findStartAgendasByCategory(categoryId)).rejects.toThrow(NotFoundException);   
+      await expect(serviceAgenda.findAgendasByStatus(categoryId)).rejects.toThrow(NotFoundException);   
     })
 
     it('should return agendas with votes when category is provided', async () => {
@@ -115,7 +115,7 @@ describe('AgendaService', () => {
         const mockTotalVotes: number = 1;
 
         jest.spyOn(serviceAgenda, "findStartAgendasByCategory").mockResolvedValue(mockAgenda);
-        const agenda: ListAgendaDto[] = await serviceAgenda.findStartAgendasByCategory(mockCategory.id);
+        const agenda: ListAgendaDto[] = await serviceAgenda.findAgendasByStatus(mockCategory.id);
         expect(agenda).toEqual(mockAgenda);
         expect(agenda).toHaveLength(2);
         expect(agenda[0].quantidadeVotos).toBe(mockTotalVotes);

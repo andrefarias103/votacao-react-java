@@ -38,6 +38,7 @@ export class AuthenticationService {
       id: user.id,
       name: user.nome,
       token_acesso: await this.jwtService.signAsync(payload),
+      cpf: user.cpf,
     };
   }
 
@@ -51,12 +52,4 @@ export class AuthenticationService {
     return true;
   }
   
-  ///
-  async validateToken(payload: any) {
-
-    return {
-      id: payload.sub,
-      name: payload.username,
-    };
-  }  
 }

@@ -4,6 +4,7 @@ import { Roles } from './../autenticacao/roles';
 import { RolesGuard } from './../autenticacao/roles.guard';
 import { UserProfileEnum } from './../usuario/enums/user-profile.enum';
 import { CreateVotationDto } from './dto/create-votation.dto';
+import { ResultVotation } from './dto/result-votation.dto';
 import { VotationService } from './votation.service';
 
 @Controller('votacao')
@@ -23,9 +24,8 @@ export class VotationController {
   }
 
   @Get('total_votes/:pautaId')
-  public async getTotalVotes(@Param('pautaId') agendaId: number): Promise<number> {
-    const totalVotes = await this.votationService.getTotalVotes(agendaId);
-    return totalVotes;
+  public async getResultVotation(@Param('pautaId') agendaId: number): Promise<ResultVotation> {
+    return await this.votationService.getResultVotation(agendaId);
   }
 
 }

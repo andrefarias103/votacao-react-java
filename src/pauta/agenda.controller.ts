@@ -20,14 +20,14 @@ export class AgendaController {
     return agenda;
   }
 
-  @Get('/liberadas/:categoriaId')
-  async findStartAgendasByCategory(@Param('categoriaId') categoryId: number) {
-    return await this.agendaService.findStartAgendasByCategory(categoryId);
+  @Get('/status/:statusAgenda')
+  async findAgendasByFinishStatus(@Param('statusAgenda') statusAgenda: string) {
+    return await this.agendaService.findAgendasByFinishStatus(statusAgenda);
   }    
 
   @Get('/liberadas')
   async findStartAgendas() {
-    return await this.agendaService.findStartAgendasByCategory();
+    return await this.agendaService.findAgendasByStatus();
   }
 
   @Get('/filtro_id/:id')

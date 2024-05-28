@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { TRepository } from '../repository/repository';
 import { getDateFormat } from '../utils/date-operations.utils';
 import { CreateVotationDto } from './dto/create-votation.dto';
-import { UpdateVotationDto } from './dto/update-votation.dto';
+import { ResultVotation } from './dto/result-votation.dto';
 
 @Injectable()
 export class VotationService {
@@ -72,30 +72,41 @@ export class VotationService {
   }
 
   ////
-  async getTotalVotes(agendaId: number): Promise<number> {
+  // async getTotalVotes(agendaId: number): Promise<number> {
+  //   const agenda = await this.repositoryAgenda.findById({ where:  { id: agendaId} });
+  //   if (agenda === null) { 
+  //     throw new NotFoundException(`Pauta [${agendaId}]: não encontrada'`)
+  //   };
+
+  //   const totalVotes = await this.repository.recordCountById({ pautaId: agendaId });
+    
+  //   return totalVotes;
+  // }
+
+  async getResultVotation(agendaId: number): Promise<ResultVotation> {
+
     const agenda = await this.repositoryAgenda.findById({ where:  { id: agendaId} });
     if (agenda === null) { 
       throw new NotFoundException(`Pauta [${agendaId}]: não encontrada'`)
     };
 
-    const totalVotes = await this.repository.recordCountById({ pautaId: agendaId });
+    const totalVotes: number = await this.repository.recordCountById({ where: {pautaId: agendaId} });
     
-    return totalVotes;
+    const totalVotesYes: number = await this.repository.recordCountById({ where: { AND: [{ pautaId: agendaId}, 
+                                                                                  {opcaoVotada: 'Sim'}]} });
+
+                                                                                
+    const totalVotesNo: number = totalVotes - totalVotesYes;
+
+    const approved: string = (totalVotesYes > totalVotesNo)? 'SIM' : 'NÃO' ;
+
+    return {
+      pautaId: agendaId,
+      quantidadeVotos: totalVotes,
+      quantidadeVotosSim: totalVotesYes,
+      quantidadeVotosNao: totalVotesNo,
+      resultado: approved, 
+    };
   }
 
-  findAll() {
-    return `This action returns all votacao`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} votacao`;
-  }
-
-  update(id: number, updateVotacaoDto: UpdateVotationDto) {
-    return `This action updates a #${id} votacao`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} votacao`;
-  }
 }
