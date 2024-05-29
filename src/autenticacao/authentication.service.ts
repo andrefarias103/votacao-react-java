@@ -45,7 +45,6 @@ export class AuthenticationService {
   ///
   async validateCPF(cpf: string): Promise<boolean>   {
     const user = await this.userService.findUserByCpf(cpf);
-    console.log(user);
     if (!user) {
       return false;
     }

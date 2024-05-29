@@ -21,24 +21,21 @@ export class AgendaController {
   }
 
   @Get('/status/:statusAgenda')
-  async findAgendasByFinishStatus(@Param('statusAgenda') statusAgenda: string) {
-    return await this.agendaService.findAgendasByFinishStatus(statusAgenda);
+  async findAgendasByStatus(@Param('statusAgenda') statusAgenda: string) {
+    return await this.agendaService.findAgendasByStatus(statusAgenda);
+  }  
+
+  @Get('/status/:categoriaId/:statusAgenda')
+  async findAgendasByCategoryAndStatus(@Param('categoriaId') categoryId: number, @Param('statusAgenda') statusAgenda: string) {
+    return await this.agendaService.findAgendasByCategoryAndStatus(categoryId, statusAgenda);
   }    
 
-  @Get('/liberadas')
-  async findStartAgendas() {
-    return await this.agendaService.findAgendasByStatus();
-  }
 
-  @Get('/filtro_id/:id')
-  async findUserById(@Param('id') id: number) {
-    return await this.agendaService.findAgendaById(id);
-  }
-  
-  @Get('/filtro_nome/:nome')
-  async findAgendaByName(@Param('nome') nome: string) {
-    return await this.agendaService.findAgendaByName(nome);
-  }  
+  // @Get('/liberadas')
+  // async findStartAgendas() {
+  //   return await this.agendaService.findAgendasByStatus();
+  // }
+
 
   @Get()
   async findAllAgendas(): Promise<ListAgendaDto[]> {
@@ -54,6 +51,26 @@ export class AgendaController {
   async findAgenda(@Param('pautaId') agendaId: number) {
     return await this.agendaService.findAgenda(agendaId);
   }
+
+
+
+
+
+
+  
+  @Get('/filtro_id/:id')
+  async findUserById(@Param('id') id: number) {
+    return await this.agendaService.findAgendaById(id);
+  }
+  
+  @Get('/filtro_nome/:nome')
+  async findAgendaByName(@Param('nome') nome: string) {
+    return await this.agendaService.findAgendaByName(nome);
+  }  
+
+
+
+
 
   @Put(':id')
   @Roles(UserProfileEnum.PERFIL_ADMIN)

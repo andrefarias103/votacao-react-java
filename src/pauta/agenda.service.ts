@@ -101,7 +101,85 @@ export class AgendaService {
   }
 
   ////
-  public async findAgendasByStatus(categoryId?: number, statusAgenda?: string): Promise<ListAgendaDto[]> {
+  public async findAgendasByStatus(statusAgenda: string): Promise<ListAgendaDto[]> {
+      
+    const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { Sessao: {status: statusAgenda}}});         
+    
+    const itemAgendas = agendas.map((item) => { 
+      return this.serviceVotation.getResultVotation(item.id)
+    });
+
+    const agendasComVotos = await Promise.all(agendas.map(async agenda => {
+      if (agenda.Sessao) {
+        agenda.Sessao.dataHoraInicio = new Date(agenda.Sessao.dataHoraInicio).toLocaleString();
+        agenda.Sessao.dataHoraFim = new Date(agenda.Sessao.dataHoraFim).toLocaleString(); 
+      }      
+      const {quantidadeVotos, quantidadeVotosSim, quantidadeVotosNao, resultado} = await this.serviceVotation.getResultVotation(agenda.id);
+      return { ...agenda, quantidadeVotos, quantidadeVotosSim, quantidadeVotosNao, resultado };
+    }));
+
+    //return plainToInstance( ListAgendaDto, agendasComVotos);     
+    return agendasComVotos;
+
+  }
+
+
+    ////
+    public async findAgendasByCategoryAndStatus(categoryId: number, statusAgenda: string): Promise<ListAgendaDto[]> {
+      
+      const category = await this.repositoryCategory.findById({ where: { id: categoryId }});      
+      if (category === null) {
+            throw new NotFoundException('Categoria não foi encontrada')
+        };
+      
+      const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, 
+                                                             where: { categoriaId: categoryId, 
+                                                                      Sessao: {status: statusAgenda}}});   
+    
+      const itemAgendas = agendas.map((item) => { 
+            return this.serviceVotation.getResultVotation(item.id)
+      });
+  
+      const agendasComVotos = await Promise.all(agendas.map(async agenda => {
+        if (agenda.Sessao) {
+          agenda.Sessao.dataHoraInicio = new Date(agenda.Sessao.dataHoraInicio).toLocaleString();
+          agenda.Sessao.dataHoraFim = new Date(agenda.Sessao.dataHoraFim).toLocaleString(); 
+        }      
+        const {quantidadeVotos, quantidadeVotosSim, quantidadeVotosNao, resultado} = await this.serviceVotation.getResultVotation(agenda.id);
+        return { ...agenda, quantidadeVotos, quantidadeVotosSim, quantidadeVotosNao, resultado };
+      }));
+  
+      return plainToInstance( ListAgendaDto, agendasComVotos);     
+  
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ////
+  public async findAgendasByStatus1(categoryId?: number, statusAgenda?: string): Promise<ListAgendaDto[]> {
       
     let agendas: ListAgendaDto[];
 
@@ -141,27 +219,33 @@ export class AgendaService {
 
   }
 
+
+
+
+
+
+
   ////
-  public async findAgendasByFinishStatus(statusAgenda: string): Promise<ListAgendaDto[]> {
+  // public async findAgendasByFinishStatus(statusAgenda: string): Promise<ListAgendaDto[]> {
       
-    const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { Sessao: {status: statusAgenda}}});         
+  //   const agendas: ListAgendaDto[] = await this.repositoryAgenda.findAll({ include: {categoria: true, Sessao: true, votacao: true}, where: { Sessao: {status: statusAgenda}}});         
     
-    const itemAgendas = agendas.map((item) => { 
-      return this.serviceVotation.getResultVotation(item.id)
-    });
+  //   const itemAgendas = agendas.map((item) => { 
+  //     return this.serviceVotation.getResultVotation(item.id)
+  //   });
 
-    const agendasComVotos = await Promise.all(agendas.map(async agenda => {
-      if (agenda.Sessao) {
-        agenda.Sessao.dataHoraInicio = new Date(agenda.Sessao.dataHoraInicio).toLocaleString();
-        agenda.Sessao.dataHoraFim = new Date(agenda.Sessao.dataHoraFim).toLocaleString(); 
-      }      
-      const {quantidadeVotos, quantidadeVotosSim, quantidadeVotosNao, resultado} = await this.serviceVotation.getResultVotation(agenda.id);
-      return { ...agenda, quantidadeVotos, quantidadeVotosSim, quantidadeVotosNao, resultado };
-    }));
+  //   const agendasComVotos = await Promise.all(agendas.map(async agenda => {
+  //     if (agenda.Sessao) {
+  //       agenda.Sessao.dataHoraInicio = new Date(agenda.Sessao.dataHoraInicio).toLocaleString();
+  //       agenda.Sessao.dataHoraFim = new Date(agenda.Sessao.dataHoraFim).toLocaleString(); 
+  //     }      
+  //     const {quantidadeVotos, quantidadeVotosSim, quantidadeVotosNao, resultado} = await this.serviceVotation.getResultVotation(agenda.id);
+  //     return { ...agenda, quantidadeVotos, quantidadeVotosSim, quantidadeVotosNao, resultado };
+  //   }));
 
-    return agendasComVotos;     
+  //   return agendasComVotos;     
 
-  }  
+  // }  
 
   ////
   public async findAgendaById(id: number): Promise<ListAgendaDto[]> {      
