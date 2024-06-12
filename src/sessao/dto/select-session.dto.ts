@@ -1,24 +1,16 @@
-import { Exclude, Expose } from 'class-transformer';
-
+import { Exclude, Expose } from "class-transformer";
 
 @Exclude()
 export class ListSessionDto {
-    @Expose()
-    id: string;
-    
-    @Expose()
-    dataHoraInicio: string;
-    
-    @Expose()
-    dataHoraFim: string;
+  @Expose()
+  id: string;
 
-    @Expose()
-    status: string;
+  @Expose()
+  dataHoraInicio: string;
 
-    // @Expose()
-    // @IsOptional()
-    // @ValidateNested()
-    // @Type(() => ListAgendaDto)
-    // pauta?: ListAgendaDto[]
+  @Expose()
+  dataHoraFim: string;
 
+  @Expose()
+  status: string;
 }

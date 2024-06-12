@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { TRepository } from 'src/repository/repository';
-import { VotationController } from './votation.controller';
-import { VotationService } from './votation.service';
+import { Module } from "@nestjs/common";
+import { TRepository } from "src/repository/repository";
+import { VotationController } from "./votation.controller";
+import { VotationService } from "./votation.service";
 
 @Module({
   imports: [],

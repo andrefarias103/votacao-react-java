@@ -1,7 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import * as bCrypt from 'bcrypt';
-import { UserService } from './../usuario/user.service';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import * as bCrypt from "bcrypt";
+import { UserService } from "./../usuario/user.service";
 
 export interface UserPayload {
   sub: number;
@@ -10,7 +10,6 @@ export interface UserPayload {
 
 @Injectable()
 export class AuthenticationService {
-
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
@@ -19,13 +18,10 @@ export class AuthenticationService {
   async loginToTheSystem(login: string, senhaInserida: string) {
     const user = await this.userService.findUserByLogin(login);
 
-    const isAuthenticated = await bCrypt.compare(
-      senhaInserida,
-      user.senha,
-    );
+    const isAuthenticated = await bCrypt.compare(senhaInserida, user.senha);
 
     if (!isAuthenticated) {
-      throw new UnauthorizedException('Login ou senha não conferem');
+      throw new UnauthorizedException("Login ou senha não conferem");
     }
 
     const payload: UserPayload = {
@@ -43,12 +39,11 @@ export class AuthenticationService {
   }
 
   ///
-  async validateCPF(cpf: string): Promise<boolean>   {
+  async validateCPF(cpf: string): Promise<boolean> {
     const user = await this.userService.findUserByCpf(cpf);
     if (!user) {
       return false;
     }
     return true;
   }
-  
 }

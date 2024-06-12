@@ -1,5 +1,5 @@
-import { Exclude, Expose } from 'class-transformer';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { Exclude, Expose } from "class-transformer";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 @Exclude()
 export class CreateCategoryDto {
@@ -10,5 +10,4 @@ export class CreateCategoryDto {
   @Expose()
   @IsOptional()
   descricao: string;
-
 }

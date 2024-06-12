@@ -4,14 +4,13 @@ import { SessionService } from "../session.service";
 
 @Injectable()
 export class SessionExpirationTask {
-    private readonly logger = new Logger(SessionExpirationTask.name);
+  private readonly logger = new Logger(SessionExpirationTask.name);
 
-    constructor(private readonly sessionService: SessionService) {}    
+  constructor(private readonly sessionService: SessionService) {}
 
-    @Cron(CronExpression.EVERY_30_MINUTES)
-    handleCron() {
-      this.sessionService.startAllSessions();
-      this.sessionService.finishAllSessions();
-    }
-
+  @Cron(CronExpression.EVERY_30_MINUTES)
+  handleCron() {
+    this.sessionService.startAllSessions();
+    this.sessionService.finishAllSessions();
+  }
 }
