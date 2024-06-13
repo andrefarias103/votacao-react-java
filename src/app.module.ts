@@ -1,13 +1,13 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
-import { AuthenticationModule } from "./autenticacao/authentication.module";
-import { CategoryModule } from "./categoria/category.module";
-import { AgendaModule } from "./pauta/agenda.module";
-import { SessionExpirationTask } from "./sessao/scheduler/session-task.scheduler";
-import { SessionModule } from "./sessao/session.module";
-import { UserModule } from "./usuario/user.module";
-import { VotationModule } from "./votacao/votation.module";
+import { AgendaModule } from "./agenda/agenda.module";
+import { AuthenticationModule } from "./authentication/authentication.module";
+import { CategoryModule } from "./category/category.module";
+import { SessionExpirationTask } from "./session/scheduler/session-task.scheduler";
+import { SessionModule } from "./session/session.module";
+import { UserModule } from "./user/user.module";
+import { VotationModule } from "./votation/votation.module";
 
 @Module({
   imports: [
